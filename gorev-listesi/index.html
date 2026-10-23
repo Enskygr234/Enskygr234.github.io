@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Görev Listesi</title>
+<style>
+  :root { --bg:#f4f5f7; --card:#fff; --text:#1d1f23; --muted:#6b7280; --accent:#4f46e5; --line:#e5e7eb; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#111318; --card:#1b1e25; --text:#e8e9ec; --muted:#9aa0aa; --accent:#818cf8; --line:#2b2f38; } }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:system-ui,sans-serif; background:var(--bg); color:var(--text); display:flex; justify-content:center; padding:40px 16px; }
+  main { width:100%; max-width:520px; background:var(--card); border-radius:14px; padding:24px; box-shadow:0 4px 20px rgba(0,0,0,.08); }
+  h1 { margin:0 0 16px; font-size:1.6rem; }
+  form { display:flex; gap:8px; }
+  input[type=text] { flex:1; padding:10px 12px; border:1px solid var(--line); border-radius:8px; background:transparent; color:inherit; font-size:1rem; }
+  button { padding:10px 14px; border:0; border-radius:8px; background:var(--accent); color:#fff; font-size:1rem; cursor:pointer; }
+  .filters { display:flex; gap:6px; margin:16px 0 8px; }
+  .filters button { background:transparent; color:var(--muted); border:1px solid var(--line); padding:6px 10px; font-size:.9rem; }
+  .filters button.active { color:var(--accent); border-color:var(--accent); }
+  ul { list-style:none; padding:0; margin:0; }
+  li { display:flex; align-items:center; gap:10px; padding:10px 4px; border-bottom:1px solid var(--line); }
+  li.done span { text-decoration:line-through; color:var(--muted); }
+  li span { flex:1; word-break:break-word; }
+  li .del { background:transparent; color:var(--muted); padding:4px 8px; }
+  li .del:hover { color:#ef4444; }
+  footer { display:flex; justify-content:space-between; margin-top:12px; color:var(--muted); font-size:.9rem; }
+  footer button { background:transparent; color:var(--muted); padding:0; font-size:.9rem; }
+</style>
+</head>
+<body>
+<main>
+  <h1>📝 Görev Listesi</h1>
+  <form id="form">
+    <input id="input" type="text" placeholder="Yeni görev ekle..." autocomplete="off" required>
+    <button type="submit">Ekle</button>
+  </form>
+  <div class="filters">
+    <button data-f="all" class="active">Tümü</button>
+    <button data-f="active">Aktif</button>
+    <button data-f="done">Tamamlanan</button>
+  </div>
+  <ul id="list"></ul>
+  <footer>
+    <span id="count"></span>
+    <button id="clear">Tamamlananları sil</button>
+  </footer>
+</main>
+<script>
+  const KEY = 'gorevler';
+  let todos = load();
+  let filter = 'all';
+
+  function load() {
+    try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch { return []; }
+  }
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(todos)); } catch {}
+  }
+
+  function render() {
+    const list = document.getElementById('list');
+    list.innerHTML = '';
+    todos
+      .filter(t => filter === 'all' || (filter === 'done' ? t.done : !t.done))
+      .forEach(t => {
+        const li = document.createElement('li');
+        if (t.done) li.className = 'done';
+        const cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.checked = t.done;
+        cb.onchange = () => { t.done = cb.checked; save(); render(); };
+        const span = document.createElement('span');
+        span.textContent = t.text;
+        span.ondblclick = () => {
+          const text = prompt('Görevi düzenle:', t.text);
+          if (text && text.trim()) { t.text = text.trim(); save(); render(); }
+        };
+        const del = document.createElement('button');
+        del.className = 'del';
+        del.textContent = '✕';
+        del.title = 'Sil';
+        del.onclick = () => { todos = todos.filter(x => x.id !== t.id); save(); render(); };
+        li.append(cb, span, del);
+        list.append(li);
+      });
+    const left = todos.filter(t => !t.done).length;
+    document.getElementById('count').textContent = `${left} görev kaldı`;
+  }
+
+  document.getElementById('form').onsubmit = e => {
+    e.preventDefault();
+    const input = document.getElementById('input');
+    const text = input.value.trim();
+    if (!text) return;
+    todos.push({ id: Date.now(), text, done: false });
+    input.value = '';
+    save(); render();
+  };
+
+  document.querySelectorAll('.filters button').forEach(b => {
+    b.onclick = () => {
+      filter = b.dataset.f;
+      document.querySelectorAll('.filters button').forEach(x => x.classList.toggle('active', x === b));
+      render();
+    };
+  });
+
+  document.getElementById('clear').onclick = () => {
+    todos = todos.filter(t => !t.done);
+    save(); render();
+  };
+
+  render();
+</script>
+</body>
+</html>

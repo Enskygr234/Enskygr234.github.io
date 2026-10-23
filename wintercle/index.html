@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wintercle</title>
+  <meta name="description" content="Wintercle — kar yağışı altında sakin bir odak zamanlayıcısı.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❄️</text></svg>">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <canvas id="snow" aria-hidden="true"></canvas>
+
+  <main class="app">
+    <header class="brand">
+      <h1>Wintercle</h1>
+      <button id="lang" class="chip" type="button" aria-label="Language">EN</button>
+    </header>
+
+    <nav class="modes" role="tablist">
+      <button class="mode active" data-mode="focus" role="tab" data-i18n="focus">Odak</button>
+      <button class="mode" data-mode="short" role="tab" data-i18n="short">Kısa mola</button>
+      <button class="mode" data-mode="long" role="tab" data-i18n="long">Uzun mola</button>
+    </nav>
+
+    <section class="circle" aria-live="polite">
+      <svg viewBox="0 0 220 220" class="ring">
+        <circle class="track" cx="110" cy="110" r="100"/>
+        <circle class="progress" id="progress" cx="110" cy="110" r="100"/>
+      </svg>
+      <div class="readout">
+        <div id="time" class="time">25:00</div>
+        <div id="label" class="label" data-i18n="focus">Odak</div>
+      </div>
+    </section>
+
+    <div class="controls">
+      <button id="reset" class="icon" type="button" title="R" data-i18n-title="reset">↺</button>
+      <button id="toggle" class="primary" type="button" data-i18n="start">Başla</button>
+      <button id="sound" class="icon" type="button" title="S" data-i18n-title="sound">🔇</button>
+    </div>
+
+    <div class="stats">
+      <span>❄ <b id="count">0</b> <span data-i18n="done">tamamlanan oturum</span></span>
+    </div>
+
+    <details class="settings">
+      <summary data-i18n="settings">Ayarlar</summary>
+      <label><span data-i18n="focusMin">Odak (dk)</span><input type="number" id="focusMin" min="1" max="120"></label>
+      <label><span data-i18n="shortMin">Kısa mola (dk)</span><input type="number" id="shortMin" min="1" max="60"></label>
+      <label><span data-i18n="longMin">Uzun mola (dk)</span><input type="number" id="longMin" min="1" max="60"></label>
+      <label><span data-i18n="snow">Kar yoğunluğu</span><input type="range" id="snowLevel" min="0" max="400" step="10"></label>
+    </details>
+
+    <footer class="hint" data-i18n="hint">Boşluk: başlat/durdur · R: sıfırla · S: ses</footer>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

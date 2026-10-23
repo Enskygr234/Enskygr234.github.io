@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>Piksel Ayaz — tarayıcıda piksel çizim</title>
+<meta name="description" content="Tarayıcıda piksel sanatı çiz: kalem, silgi, kova, damlalık, ayna modu, geri al. PNG olarak indir.">
+<meta name="theme-color" content="#0b1626">
+<style>
+  :root { --zemin: #0b1626; --kart: #13263d; --cizgi: rgba(255,255,255,.14); --yazi: #e8f1f8; --soluk: #8aa3b8; --buz: #4fb3e0; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; }
+  body {
+    font: 15px/1.4 "Segoe UI", system-ui, -apple-system, Roboto, sans-serif; color: var(--yazi);
+    background: radial-gradient(1100px 560px at 50% -10%, #1d3a5c 0%, #0f2136 45%, var(--zemin) 100%) fixed var(--zemin);
+    min-height: 100vh;
+  }
+  main { max-width: 980px; margin: 0 auto; padding: 22px 16px 40px; display: grid; grid-template-columns: 1fr 260px; gap: 18px; align-items: start; }
+  header { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  h1 { margin: 0; font-size: 28px; letter-spacing: -.5px; }
+  h1 span { color: var(--buz); }
+  .ust-dugmeler { display: flex; gap: 8px; flex-wrap: wrap; }
+  button, select { font: inherit; color: var(--yazi); background: var(--kart); border: 1px solid var(--cizgi); border-radius: 10px; padding: 7px 12px; cursor: pointer; }
+  button:disabled { opacity: .4; cursor: default; }
+  button.ana { background: var(--buz); color: #06121f; font-weight: 700; border-color: transparent; }
+  button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+  .tuval-kutu { background: var(--kart); border: 1px solid var(--cizgi); border-radius: 16px; padding: 12px; }
+  #tuval {
+    display: block; width: 100%; aspect-ratio: 1; touch-action: none; cursor: crosshair; border-radius: 6px;
+    image-rendering: pixelated;
+    background: repeating-conic-gradient(#2a3b4e 0% 25%, #22324a 0% 50%) 0 0 / 16px 16px;
+  }
+  aside { display: grid; gap: 14px; }
+  .panel { background: var(--kart); border: 1px solid var(--cizgi); border-radius: 16px; padding: 14px; }
+  .panel h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--buz); margin: 0 0 10px; }
+  .araclar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .araclar button { padding: 8px 4px; font-size: 13px; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+  .araclar button b { font-size: 20px; font-weight: 400; }
+  .araclar button[aria-pressed="true"] { background: var(--buz); color: #06121f; border-color: transparent; font-weight: 700; }
+  .palet { display: grid; grid-template-columns: repeat(8, 1fr); gap: 5px; }
+  .palet button { aspect-ratio: 1; padding: 0; border-radius: 6px; border: 2px solid transparent; }
+  .palet button[aria-pressed="true"] { border-color: #fff; box-shadow: 0 0 0 2px var(--buz); }
+  .renk-satir { display: flex; align-items: center; gap: 10px; margin-top: 10px; font-size: 13px; color: var(--soluk); }
+  input[type=color] { width: 44px; height: 34px; border: 1px solid var(--cizgi); border-radius: 8px; background: transparent; padding: 2px; cursor: pointer; }
+  .satir { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 8px; font-size: 14px; }
+  .satir input[type=checkbox] { width: 18px; height: 18px; accent-color: var(--buz); }
+  .ipucu { font-size: 12.5px; color: var(--soluk); margin: 10px 0 0; }
+  footer { grid-column: 1 / -1; color: var(--soluk); font-size: 13px; }
+  a { color: var(--buz); }
+  @media (max-width: 760px) {
+    main { grid-template-columns: 1fr; }
+    aside { grid-template-columns: 1fr 1fr; }
+    .panel.genis { grid-column: 1 / -1; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Piksel <span>Ayaz</span></h1>
+    <div class="ust-dugmeler">
+      <button id="geri" title="Geri al (Ctrl+Z)">↶</button>
+      <button id="ileri" title="Yinele (Ctrl+Y)">↷</button>
+      <select id="boyut" title="Tuval boyutu">
+        <option value="16">16 × 16</option>
+        <option value="24">24 × 24</option>
+        <option value="32" selected>32 × 32</option>
+        <option value="48">48 × 48</option>
+      </select>
+      <button id="temizle">Temizle</button>
+      <button id="ornek">✨ Örnek</button>
+      <button class="ana" id="indir">⬇ PNG indir</button>
+    </div>
+  </header>
+
+  <div class="tuval-kutu"><canvas id="tuval" width="640" height="640" aria-label="Çizim alanı"></canvas></div>
+
+  <aside>
+    <div class="panel">
+      <h2>Araçlar</h2>
+      <div class="araclar">
+        <button data-arac="kalem" aria-pressed="true" title="Kalem (B)"><b>✏️</b>Kalem</button>
+        <button data-arac="silgi" aria-pressed="false" title="Silgi (E)"><b>🧽</b>Silgi</button>
+        <button data-arac="kova" aria-pressed="false" title="Kova (G)"><b>🪣</b>Kova</button>
+        <button data-arac="damla" aria-pressed="false" title="Damlalık (I)"><b>💧</b>Damlalık</button>
+        <button data-arac="cizgi" aria-pressed="false" title="Çizgi (L)"><b>📏</b>Çizgi</button>
+        <button data-arac="kutu" aria-pressed="false" title="Dikdörtgen (R)"><b>⬜</b>Kutu</button>
+      </div>
+      <label class="satir">Ayna (sağ-sol simetri) <input type="checkbox" id="ayna"></label>
+      <label class="satir">Izgara çizgileri <input type="checkbox" id="izgara" checked></label>
+    </div>
+
+    <div class="panel genis">
+      <h2>Renkler</h2>
+      <div class="palet" id="palet"></div>
+      <div class="renk-satir"><input type="color" id="ozelRenk" value="#4fb3e0"> <span>Kendi rengini seç</span></div>
+      <label class="satir">PNG büyütme
+        <select id="olcek"><option value="8">8×</option><option value="16" selected>16×</option><option value="32">32×</option></select></label>
+      <p class="ipucu">Çizimin bu tarayıcıda kendiliğinden saklanır. Farede sağ tık o pikseli siler.</p>
+    </div>
+  </aside>
+
+  <footer>Winterdeveloper</footer>
+</main>
+
+<script>
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const PALET = ["#000000", "#1d2b53", "#2d5f99", "#4fb3e0", "#a9e1fb", "#ffffff", "#c2c3c7", "#5f574f",
+                 "#7e2553", "#ff004d", "#ff77a8", "#ffa300", "#ffec27", "#00e436", "#008751", "#ab5236"];
+  const tuval = $("tuval"), c = tuval.getContext("2d");
+  let N = 32, pikseller, arac = "kalem", renk = "#4fb3e0";
+  let gecmis = [], ileriYigin = [], ciziyor = false, sonP = null, baslangicP = null, onizlemeP = null, silerek = false;
+
+  // ---------- veri ----------
+  const bos = n => Array(n * n).fill(null);
+  function oku() { try { return JSON.parse(localStorage.getItem("pikselayaz") || "null"); } catch { return null; } }
+  function kaydet() { try { localStorage.setItem("pikselayaz", JSON.stringify({ N, pikseller })); } catch { /* gizli sekme */ } }
+
+  function anlik() { gecmis.push(pikseller.slice()); if (gecmis.length > 150) gecmis.shift(); ileriYigin = []; dugmeleriGuncelle(); }
+  function geriAl() { if (!gecmis.length) return; ileriYigin.push(pikseller); pikseller = gecmis.pop(); ciz(); kaydet(); dugmeleriGuncelle(); }
+  function yinele() { if (!ileriYigin.length) return; gecmis.push(pikseller); pikseller = ileriYigin.pop(); ciz(); kaydet(); dugmeleriGuncelle(); }
+  function dugmeleriGuncelle() { $("geri").disabled = !gecmis.length; $("ileri").disabled = !ileriYigin.length; }
+
+  function koy(x, y, r) {
+    if (x < 0 || y < 0 || x >= N || y >= N) return;
+    pikseller[y * N + x] = r;
+    if ($("ayna").checked) pikseller[y * N + (N - 1 - x)] = r;
+  }
+
+  // Bresenham: iki nokta arasındaki pikseller (hızlı fare hareketinde boşluk kalmasın)
+  function hat(x0, y0, x1, y1, f) {
+    const dx = Math.abs(x1 - x0), dy = -Math.abs(y1 - y0), sx = x0 < x1 ? 1 : -1, sy = y0 < y1 ? 1 : -1;
+    let e = dx + dy;
+    for (;;) {
+      f(x0, y0);
+      if (x0 === x1 && y0 === y1) break;
+      const e2 = 2 * e;
+      if (e2 >= dy) { e += dy; x0 += sx; }
+      if (e2 <= dx) { e += dx; y0 += sy; }
+    }
+  }
+
+  function doldur(x, y, yeni) {
+    const hedef = pikseller[y * N + x];
+    if (hedef === yeni) return;
+    const yigin = [[x, y]];
+    while (yigin.length) {
+      const [px, py] = yigin.pop();
+      if (px < 0 || py < 0 || px >= N || py >= N || pikseller[py * N + px] !== hedef) continue;
+      pikseller[py * N + px] = yeni;
+      yigin.push([px + 1, py], [px - 1, py], [px, py + 1], [px, py - 1]);
+    }
+  }
+
+  function kutuCiz(a, b, r) {
+    const x0 = Math.min(a.x, b.x), x1 = Math.max(a.x, b.x), y0 = Math.min(a.y, b.y), y1 = Math.max(a.y, b.y);
+    for (let x = x0; x <= x1; x++) { koy(x, y0, r); koy(x, y1, r); }
+    for (let y = y0; y <= y1; y++) { koy(x0, y, r); koy(x1, y, r); }
+  }
+
+  // ---------- çizim ----------
+  function ciz() {
+    const k = tuval.width / N;
+    c.clearRect(0, 0, tuval.width, tuval.height);
+    for (let i = 0; i < pikseller.length; i++) {
+      if (!pikseller[i]) continue;
+      c.fillStyle = pikseller[i];
+      c.fillRect((i % N) * k, Math.floor(i / N) * k, Math.ceil(k), Math.ceil(k));
+    }
+    // çizgi / kutu önizlemesi
+    if (onizlemeP && baslangicP) {
+      const kopya = pikseller; pikseller = pikseller.slice();
+      if (arac === "cizgi") hat(baslangicP.x, baslangicP.y, onizlemeP.x, onizlemeP.y, (x, y) => koy(x, y, renk));
+      else kutuCiz(baslangicP, onizlemeP, renk);
+      c.globalAlpha = 0.75;
+      for (let i = 0; i < pikseller.length; i++) if (pikseller[i] !== kopya[i] && pikseller[i]) {
+        c.fillStyle = pikseller[i]; c.fillRect((i % N) * k, Math.floor(i / N) * k, Math.ceil(k), Math.ceil(k));
+      }
+      c.globalAlpha = 1;
+      pikseller = kopya;
+    }
+    if ($("izgara").checked) {
+      c.strokeStyle = "rgba(255,255,255,.08)"; c.lineWidth = 1;
+      c.beginPath();
+      for (let i = 1; i < N; i++) { const p = Math.round(i * k) + 0.5; c.moveTo(p, 0); c.lineTo(p, tuval.height); c.moveTo(0, p); c.lineTo(tuval.width, p); }
+      c.stroke();
+      if ($("ayna").checked) { c.strokeStyle = "rgba(79,179,224,.6)"; c.beginPath(); c.moveTo(tuval.width / 2, 0); c.lineTo(tuval.width / 2, tuval.height); c.stroke(); }
+    }
+  }
+
+  // ---------- girdi ----------
+  function piksel(e) {
+    const r = tuval.getBoundingClientRect();
+    return { x: Math.floor(((e.clientX - r.left) / r.width) * N), y: Math.floor(((e.clientY - r.top) / r.height) * N) };
+  }
+
+  function uygula(p, ilk) {
+    const r = silerek || arac === "silgi" ? null : renk;
+    if (arac === "kova" && ilk) { if (p.x >= 0 && p.y >= 0 && p.x < N && p.y < N) doldur(p.x, p.y, r); }
+    else if (arac === "damla" && ilk) { const v = pikseller[p.y * N + p.x]; if (v) renkSec(v); }
+    else if (arac === "kalem" || arac === "silgi") {
+      if (sonP) hat(sonP.x, sonP.y, p.x, p.y, (x, y) => koy(x, y, r)); else koy(p.x, p.y, r);
+    }
+    sonP = p;
+    ciz();
+  }
+
+  tuval.addEventListener("contextmenu", e => e.preventDefault());
+  tuval.addEventListener("pointerdown", e => {
+    e.preventDefault();
+    tuval.setPointerCapture(e.pointerId);
+    silerek = e.button === 2;
+    ciziyor = true; sonP = null;
+    const p = piksel(e);
+    if (arac !== "damla") anlik();
+    if (arac === "cizgi" || arac === "kutu") { baslangicP = p; onizlemeP = p; ciz(); return; }
+    uygula(p, true);
+  });
+  tuval.addEventListener("pointermove", e => {
+    if (!ciziyor) return;
+    const p = piksel(e);
+    if (arac === "cizgi" || arac === "kutu") { onizlemeP = p; ciz(); return; }
+    if (arac === "kalem" || arac === "silgi") uygula(p, false);
+  });
+  function bitir(e) {
+    if (!ciziyor) return;
+    ciziyor = false;
+    if ((arac === "cizgi" || arac === "kutu") && baslangicP) {
+      const p = piksel(e), r = silerek ? null : renk;
+      if (arac === "cizgi") hat(baslangicP.x, baslangicP.y, p.x, p.y, (x, y) => koy(x, y, r)); else kutuCiz(baslangicP, p, r);
+      baslangicP = onizlemeP = null;
+    }
+    sonP = null; silerek = false;
+    ciz(); kaydet();
+  }
+  tuval.addEventListener("pointerup", bitir);
+  tuval.addEventListener("pointercancel", bitir);
+
+  function aracSec(a) {
+    arac = a;
+    document.querySelectorAll("[data-arac]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.arac === a)));
+  }
+  document.querySelectorAll("[data-arac]").forEach(b => b.onclick = () => aracSec(b.dataset.arac));
+
+  function renkSec(r) {
+    renk = r;
+    $("ozelRenk").value = r;
+    document.querySelectorAll(".palet button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.renk === r)));
+    if (arac === "silgi" || arac === "damla") aracSec("kalem");
+  }
+  PALET.forEach(r => {
+    const b = document.createElement("button");
+    b.style.background = r; b.dataset.renk = r; b.title = r; b.setAttribute("aria-label", "Renk " + r);
+    b.onclick = () => renkSec(r);
+    $("palet").appendChild(b);
+  });
+  $("ozelRenk").addEventListener("input", e => renkSec(e.target.value));
+  $("ayna").onchange = ciz;
+  $("izgara").onchange = ciz;
+
+  addEventListener("keydown", e => {
+    if (e.target.tagName === "INPUT" || e.target.tagName === "SELECT") return;
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z") { e.preventDefault(); e.shiftKey ? yinele() : geriAl(); }
+    else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "y") { e.preventDefault(); yinele(); }
+    else {
+      const k = { b: "kalem", e: "silgi", g: "kova", i: "damla", l: "cizgi", r: "kutu" }[e.key.toLowerCase()];
+      if (k) aracSec(k);
+      else if (e.key.toLowerCase() === "m") { $("ayna").checked = !$("ayna").checked; ciz(); }
+    }
+  });
+
+  $("geri").onclick = geriAl;
+  $("ileri").onclick = yinele;
+  $("temizle").onclick = () => { anlik(); pikseller = bos(N); ciz(); kaydet(); };
+  $("boyut").onchange = e => {
+    const yeni = +e.target.value;
+    if (pikseller.some(Boolean) && !confirm("Tuval boyutu değişince çizim temizlenir. Devam edilsin mi?")) { e.target.value = N; return; }
+    N = yeni; pikseller = bos(N); gecmis = []; ileriYigin = []; dugmeleriGuncelle(); ciz(); kaydet();
+  };
+
+  $("indir").onclick = () => {
+    const o = +$("olcek").value, t = document.createElement("canvas");
+    t.width = t.height = N * o;
+    const x = t.getContext("2d");
+    pikseller.forEach((r, i) => { if (r) { x.fillStyle = r; x.fillRect((i % N) * o, Math.floor(i / N) * o, o, o); } });
+    const a = document.createElement("a");
+    a.href = t.toDataURL("image/png"); a.download = `piksel-ayaz-${N}x${N}.png`;
+    document.body.appendChild(a); a.click(); a.remove();
+  };
+
+  // Örnek: 16×16 kardan adam (tuvalin ortasına yerleştirilir)
+  const ORNEK = [
+    "......KKKK......", ".....KKKKKK.....", "....KKKKKKKK....", "......BBBB......",
+    ".....BBBBBB.....", "....BBSBBSBB....", "....BBBTTBBB....", ".....BBBBBB.....",
+    "...RRRRRRRRRR...", "....BBBBBBRR....", "...BBBBSBBBBB...", "..BBBBBBBBBBBB..",
+    "..BBBBBSBBBBBB..", "..BBBBBBBBBBBB..", "...BBBBSBBBBB...", "....BBBBBBBB....",
+  ];
+  const ORNEK_RENK = { K: "#1d2b53", B: "#ffffff", S: "#000000", T: "#ffa300", R: "#ff004d" };
+  $("ornek").onclick = () => {
+    anlik();
+    pikseller = bos(N);
+    const ox = Math.floor((N - 16) / 2), oy = Math.floor((N - 16) / 2);
+    ORNEK.forEach((s, y) => Array.from(s).forEach((h, x) => { if (h !== ".") pikseller[(y + oy) * N + (x + ox)] = ORNEK_RENK[h]; }));
+    ciz(); kaydet();
+  };
+
+  // ---------- başlangıç ----------
+  const k = oku();
+  if (k && k.N && Array.isArray(k.pikseller) && k.pikseller.length === k.N * k.N) { N = k.N; pikseller = k.pikseller; $("boyut").value = N; }
+  else pikseller = bos(N);
+  renkSec(renk);
+  dugmeleriGuncelle();
+  ciz();
+
+  // Testler için
+  window.PikselAyaz = { durum: () => ({ N, dolu: pikseller.filter(Boolean).length, gecmis: gecmis.length }), hat, doldur: (x, y, r) => { doldur(x, y, r); ciz(); }, piksel: (x, y) => pikseller[y * N + x] };
+</script>
+</body>
+</html>

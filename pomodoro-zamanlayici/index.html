@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pomodoro Zamanlayıcı</title>
+<style>
+  :root { --bg:#fdf2f2; --card:#fff; --text:#2a1414; --muted:#8a6b6b; --accent:#e5484d; }
+  body.break { --bg:#effaf4; --text:#11291c; --muted:#5f7f6d; --accent:#2f9e64; }
+  * { box-sizing:border-box; }
+  body { margin:0; min-height:100vh; font-family:system-ui,sans-serif; background:var(--bg); color:var(--text); display:flex; align-items:center; justify-content:center; padding:16px; transition:background .4s; }
+  main { width:100%; max-width:420px; background:var(--card); border-radius:18px; padding:32px 24px; text-align:center; box-shadow:0 6px 24px rgba(0,0,0,.08); }
+  .modes { display:flex; gap:6px; justify-content:center; margin-bottom:24px; flex-wrap:wrap; }
+  .modes button { background:transparent; border:1px solid #ddd; color:var(--muted); padding:6px 12px; border-radius:999px; cursor:pointer; }
+  .modes button.active { background:var(--accent); border-color:var(--accent); color:#fff; }
+  svg { width:240px; height:240px; }
+  .time { font-size:3.4rem; font-weight:700; font-variant-numeric:tabular-nums; fill:var(--text); }
+  .controls { display:flex; gap:10px; justify-content:center; margin-top:20px; }
+  .controls button { padding:12px 22px; font-size:1rem; border:0; border-radius:10px; cursor:pointer; }
+  #start { background:var(--accent); color:#fff; min-width:120px; }
+  #reset { background:#eee; color:#333; }
+  p { color:var(--muted); margin:18px 0 0; }
+</style>
+</head>
+<body>
+<main>
+  <div class="modes">
+    <button data-mode="work" class="active">Çalışma</button>
+    <button data-mode="short">Kısa Mola</button>
+    <button data-mode="long">Uzun Mola</button>
+  </div>
+  <svg viewBox="0 0 240 240">
+    <circle cx="120" cy="120" r="108" fill="none" stroke="#eee" stroke-width="12"/>
+    <circle id="ring" cx="120" cy="120" r="108" fill="none" stroke="var(--accent)" stroke-width="12"
+            stroke-linecap="round" transform="rotate(-90 120 120)"/>
+    <text id="time" class="time" x="120" y="138" text-anchor="middle">25:00</text>
+  </svg>
+  <div class="controls">
+    <button id="start">Başlat</button>
+    <button id="reset">Sıfırla</button>
+  </div>
+  <p>Tamamlanan pomodoro: <strong id="done">0</strong></p>
+</main>
+<script>
+  const MODES = { work: 25 * 60, short: 5 * 60, long: 15 * 60 };
+  const ring = document.getElementById('ring');
+  const C = 2 * Math.PI * 108;
+  ring.style.strokeDasharray = C;
+
+  let mode = 'work', total = MODES.work, left = total, timer = null, done = 0;
+
+  function fmt(s) {
+    return `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
+  }
+  function draw() {
+    document.getElementById('time').textContent = fmt(left);
+    ring.style.strokeDashoffset = C * (1 - left / total);
+    document.title = `${fmt(left)} · Pomodoro`;
+  }
+  function beep() {
+    try {
+      const ctx = new AudioContext();
+      [0, 0.3, 0.6].forEach(t => {
+        const o = ctx.createOscillator(), g = ctx.createGain();
+        o.frequency.value = 880;
+        o.connect(g); g.connect(ctx.destination);
+        g.gain.setValueAtTime(0.2, ctx.currentTime + t);
+        g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + t + 0.25);
+        o.start(ctx.currentTime + t); o.stop(ctx.currentTime + t + 0.25);
+      });
+    } catch {}
+  }
+  function stop() {
+    clearInterval(timer); timer = null;
+    document.getElementById('start').textContent = 'Başlat';
+  }
+  function setMode(m) {
+    stop();
+    mode = m; total = left = MODES[m];
+    document.body.classList.toggle('break', m !== 'work');
+    document.querySelectorAll('.modes button').forEach(b => b.classList.toggle('active', b.dataset.mode === m));
+    draw();
+  }
+  function tick() {
+    left--;
+    draw();
+    if (left <= 0) {
+      stop(); beep();
+      if (mode === 'work') {
+        done++;
+        document.getElementById('done').textContent = done;
+        setMode(done % 4 === 0 ? 'long' : 'short');
+      } else {
+        setMode('work');
+      }
+    }
+  }
+
+  document.getElementById('start').onclick = () => {
+    if (timer) { stop(); return; }
+    timer = setInterval(tick, 1000);
+    document.getElementById('start').textContent = 'Duraklat';
+  };
+  document.getElementById('reset').onclick = () => setMode(mode);
+  document.querySelectorAll('.modes button').forEach(b => b.onclick = () => setMode(b.dataset.mode));
+
+  draw();
+</script>
+</body>
+</html>

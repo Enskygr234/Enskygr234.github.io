@@ -1,0 +1,14 @@
+{
+  "name": "Mahalle",
+  "short_name": "Mahalle",
+  "description": "1996 yazında Akasya Sokağı'nda geçen seçimli hikaye oyunu",
+  "lang": "tr",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#14203d",
+  "theme_color": "#1f2d5a",
+  "icons": [
+    { "src": "ikon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "ikon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

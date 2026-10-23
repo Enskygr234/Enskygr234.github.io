@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Kar Birleştir</title>
+<meta name="description" content="Kar tanelerini birleştir, kartopu yap, kardan adama ulaş… en sonunda Ayaz Ata'yı çağır. 2048 tarzı kış bulmacası.">
+<meta name="theme-color" content="#0b1626">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<style>
+  :root { --zemin: #0b1626; --kart: #13263d; --yuva: #1a3150; --cizgi: rgba(255,255,255,.14); --yazi: #e8f1f8; --soluk: #8aa3b8; --buz: #4fb3e0; --kor: #f0a03c; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; height: 100%; overflow: hidden; overscroll-behavior: none; }
+  body {
+    font: 16px/1.4 "Segoe UI", system-ui, -apple-system, Roboto, sans-serif; color: var(--yazi);
+    background: radial-gradient(900px 500px at 50% -10%, #1d3a5c 0%, #0f2136 50%, var(--zemin) 100%) fixed var(--zemin);
+    display: flex; justify-content: center; user-select: none;
+  }
+  main { width: min(100%, 460px); padding: max(14px, env(safe-area-inset-top)) 16px 16px; display: flex; flex-direction: column; gap: 14px; }
+  header { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  h1 { margin: 0; font-size: 26px; line-height: 1.05; letter-spacing: .5px; }
+  h1 span { display: block; color: var(--buz); }
+  .skorlar { display: flex; gap: 8px; }
+  .skor { background: var(--kart); border: 1px solid var(--cizgi); border-radius: 12px; padding: 6px 12px; text-align: center; min-width: 74px; }
+  .skor small { display: block; font-size: 11px; color: var(--soluk); text-transform: uppercase; letter-spacing: 1px; }
+  .skor b { font-size: 20px; font-variant-numeric: tabular-nums; }
+  .ust-satir { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .hedef { font-size: 14px; color: var(--soluk); }
+  .hedef b { color: var(--yazi); }
+  .dugmeler { display: flex; gap: 8px; }
+  button { font: inherit; color: var(--yazi); background: var(--kart); border: 1px solid var(--cizgi); border-radius: 10px; padding: 8px 12px; cursor: pointer; font-weight: 600; font-size: 14px; }
+  button:disabled { opacity: .4; cursor: default; }
+  button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+  button.ana { background: var(--buz); color: #06121f; border-color: transparent; }
+
+  .tahta { position: relative; width: 100%; aspect-ratio: 1; background: rgba(255,255,255,.06); border: 1px solid var(--cizgi); border-radius: 16px; padding: 3%; touch-action: none; }
+  .izgara, .karolar { position: absolute; inset: 3%; }
+  .izgara { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3%; }
+  .izgara div { background: var(--yuva); border-radius: 10px; }
+  .karo {
+    position: absolute; width: 22.75%; height: 22.75%; border-radius: 10px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    transition: transform .12s ease-in-out; will-change: transform;
+    font-weight: 800; box-shadow: inset 0 2px 0 rgba(255,255,255,.25);
+  }
+  .karo .simge { font-size: clamp(22px, 7vw, 34px); line-height: 1; }
+  .karo .sayi { font-size: clamp(11px, 3vw, 14px); opacity: .85; margin-top: 2px; }
+  .karo.yeni { animation: belir .18s ease-out .1s both; }
+  .karo.birlesti { animation: patla .2s ease-out .1s; }
+  @keyframes belir { from { scale: 0; } }
+  @keyframes patla { 50% { scale: 1.16; } }
+
+  .alt { font-size: 13px; color: var(--soluk); text-align: center; }
+  .liste { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-top: 4px; }
+  .liste span { background: var(--kart); border: 1px solid var(--cizgi); border-radius: 8px; padding: 2px 7px; font-size: 12px; }
+  .liste span.acik { color: var(--yazi); border-color: rgba(79,179,224,.6); }
+  .liste span.kapali { opacity: .4; }
+
+  .perde { position: absolute; inset: 0; border-radius: 16px; background: rgba(6,16,28,.82); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; text-align: center; padding: 20px; z-index: 5; animation: ac .3s; }
+  .perde[hidden] { display: none; }
+  .perde h2 { margin: 0; font-size: 28px; }
+  .perde p { margin: 0; color: #b9cfe0; }
+  @keyframes ac { from { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .karo { transition: none; } .karo.yeni, .karo.birlesti { animation: none; } }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Kar<span>Birleştir</span></h1>
+    <div class="skorlar">
+      <div class="skor"><small>Puan</small><b id="puan">0</b></div>
+      <div class="skor"><small>Rekor</small><b id="rekor">0</b></div>
+    </div>
+  </header>
+  <div class="ust-satir">
+    <div class="hedef">Hedef: <b>Ayaz Ata</b> 🧙</div>
+    <div class="dugmeler">
+      <button id="geri" title="Son hamleyi geri al">↶ Geri</button>
+      <button id="yeni">Yeni oyun</button>
+    </div>
+  </div>
+
+  <div class="tahta" id="tahta" aria-label="Oyun tahtası. Ok tuşları ya da kaydırma ile oyna.">
+    <div class="izgara"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    <div class="karolar" id="karolar"></div>
+    <div class="perde" id="perde" hidden></div>
+  </div>
+
+  <div class="alt">
+    Kaydır ya da ok tuşlarına bas. Aynı iki karo birleşince bir üst aşamaya geçer.
+    <div class="liste" id="liste"></div>
+  </div>
+</main>
+<script src="oyun.js"></script>
+</body>
+</html>

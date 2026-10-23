@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<script src="guard.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Winterdeveloper</title>
+<meta name="description" content="Winterdeveloper'ın oyunları, Android uygulamaları, Windows araçları ve web projeleri. Hepsi ücretsiz indir veya tarayıcıda aç.">
+<meta name="theme-color" content="#070b16">
+<meta property="og:title" content="Winterdeveloper">
+<meta property="og:description" content="Oyunlar, Android uygulamaları, Windows araçları ve web projeleri. Ücretsiz indir.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<canvas id="snow"></canvas>
+<div class="aurora"></div>
+<div class="wrap">
+  <nav>
+    <a class="logo" href="./"><span class="flake">❄</span>Winterdeveloper</a>
+  </nav>
+
+  <header>
+    <div class="tag"><i></i>Hepsi ücretsiz, hemen indir</div>
+    <h1>Winter<span>developer</span></h1>
+    <p class="lead">Oyunlar, Android uygulamaları, Windows araçları ve web projeleri. İstediğini indir ya da tarayıcıda hemen aç.</p>
+    <div class="stats" id="stats"></div>
+  </header>
+
+  <div class="controls" id="projeler">
+    <div class="controls-in">
+      <label class="search">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="q" type="search" placeholder="Proje ara…" autocomplete="off">
+      </label>
+      <div class="chips" id="chips"></div>
+    </div>
+  </div>
+
+  <main class="grid" id="grid"></main>
+
+  <footer>
+    <span>❄ Winterdeveloper · Kış gelir, kod yazılır.</span>
+    <span>Tüm hakları saklıdır © 2026</span>
+  </footer>
+</div>
+
+<script src="projects.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#0b1220">
+  <meta name="description" content="Son Tren — bir gece treninde geçen, hatırlamakla ilgili 3D hikâye oyunu. ENS Developer.">
+  <title>Son Tren</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="css/stil.css">
+</head>
+<body>
+  <canvas id="sahne"></canvas>
+
+  <div id="ust" hidden>
+    <div id="envanter"></div>
+    <div id="ipucu"></div>
+    <button id="menuBtn" class="yuvarlak" aria-label="Menü">
+      <svg viewBox="0 0 24 24" width="22" height="22"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+
+  <div id="diyalog" hidden>
+    <div class="kim"></div>
+    <p class="metin"></p>
+    <div class="secimler"></div>
+    <span class="devam">▾</span>
+  </div>
+
+  <div id="tabela" hidden>
+    <div class="levha"><small>DURAK</small><b></b></div>
+    <div class="alt"><span class="bolum"></span><span class="saat"></span></div>
+  </div>
+
+  <div id="incele" class="katman" hidden>
+    <div class="kagit">
+      <small class="tur">EŞYA</small>
+      <h3></h3>
+      <p></p>
+      <button class="dugme">Tamam</button>
+    </div>
+  </div>
+
+  <div id="ani" class="katman" hidden>
+    <div class="ani-ic">
+      <small>BİR ANI</small>
+      <h2></h2>
+      <div class="satirlar"></div>
+      <span class="dokun">devam etmek için dokun</span>
+    </div>
+  </div>
+
+  <div id="bilet" class="katman" hidden>
+    <div class="bilet-kart">
+      <div class="bilet-ust"><span>DEMİRYOLLARI</span><span>No 0417</span></div>
+      <div class="bilet-satir"><small>KALKIŞ</small><b>Karlı yol · 04:17</b></div>
+      <div class="bilet-satir"><small>VARIŞ</small><b class="varis"></b></div>
+      <div class="bilet-satir"><small>KOLTUK</small><b>7</b></div>
+      <div class="damga"></div>
+      <p class="not"></p>
+    </div>
+  </div>
+
+  <div id="son" class="katman" hidden>
+    <div class="son-ic">
+      <div class="satirlar"></div>
+      <div class="kunye" hidden>
+        <small>SON</small>
+        <h2></h2>
+        <p class="istat"></p>
+        <p class="sonlar"></p>
+        <div class="dugmeler">
+          <button class="dugme" data-is="yeniden">Yeni yolculuk</button>
+          <button class="dugme ikincil" data-is="ana">Ana menü</button>
+        </div>
+        <p class="imza">ENS Developer · Kış gelir, kod yazılır.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="perde"></div>
+
+  <div id="baslik">
+    <div class="baslik-ic">
+      <p class="ust-yazi">bir gece treni hikâyesi</p>
+      <h1>SON TREN</h1>
+      <p class="slogan">Bazı biletler yolda yazılır.</p>
+      <div class="dugmeler">
+        <button class="dugme" id="devamBtn" hidden>Devam et</button>
+        <button class="dugme" id="basBtn">Yolculuğa başla</button>
+      </div>
+      <button class="sesBtn" id="sesBtn">Ses: açık</button>
+      <p class="imza">ENS Developer</p>
+    </div>
+  </div>
+
+  <div id="menu" class="katman" hidden>
+    <div class="kagit menu-ic">
+      <h3>Duraklama</h3>
+      <button class="dugme" data-is="devam">Devam</button>
+      <button class="dugme ikincil" data-is="ses">Ses: açık</button>
+      <button class="dugme ikincil" data-is="ana">Ana menü</button>
+      <p class="kucuk">Yürümek için bir yere, konuşmak ve bakmak için kişilere ve eşyalara dokun. İlerleme otomatik kaydedilir.</p>
+    </div>
+  </div>
+
+  <div id="dondur">
+    <svg viewBox="0 0 64 64" width="64" height="64"><rect x="20" y="8" width="24" height="44" rx="4" fill="none" stroke="currentColor" stroke-width="3"/><path d="M10 40a24 24 0 0 0 20 16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M28 50l3 6-6 2" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+    <p>Telefonu yan çevir</p>
+  </div>
+
+  <noscript>Son Tren için JavaScript gerekiyor.</noscript>
+  <script type="module" src="js/oyun.js"></script>
+</body>
+</html>

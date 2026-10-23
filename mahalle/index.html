@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1f2d5a">
+<meta name="description" content="Mahalle: 1996 yazında, Akasya Sokağı'nda geçen seçimli bir hikaye oyunu.">
+<title>Mahalle</title>
+<link rel="icon" href="ikon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="css/stil.css">
+</head>
+<body>
+
+<!-- Ana menü -->
+<section id="giris" class="ekran aktif" aria-label="Ana menü">
+  <div class="giris-sahne" id="girisSahne"></div>
+  <div class="giris-icerik">
+    <h1 class="baslik">Mahalle</h1>
+    <p class="altbaslik">Akasya Sokağı, 1996</p>
+    <nav class="giris-menu">
+      <button id="btnDevam" class="el" hidden>Kaldığın yerden devam et</button>
+      <button id="btnYeni" class="el">Yeni oyun</button>
+      <button id="btnAnilar" class="el">Anı defteri</button>
+      <button id="btnSonlar" class="el">Sonlar</button>
+      <button id="btnAyar" class="el">Ayarlar</button>
+    </nav>
+  </div>
+</section>
+
+<!-- Oyun -->
+<section id="oyun" class="ekran" aria-label="Oyun">
+  <div id="sahne" class="sahne" aria-hidden="true"></div>
+  <article id="sayfa" class="sayfa">
+    <header class="sayfa-ust">
+      <button id="btnMenu" class="ikon-btn" aria-label="Menü">
+        <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h11"/></svg>
+      </button>
+      <button id="btnGecmis" class="ikon-btn" aria-label="Geçmiş">
+        <svg viewBox="0 0 24 24"><path d="M12 7v5l3 2M4.5 9A8 8 0 1 1 4 13M4 4v5h5"/></svg>
+      </button>
+      <span id="tarih" class="tarih"></span>
+    </header>
+    <div id="kaydir" class="kaydir">
+      <div id="metin" class="metin" aria-live="polite"></div>
+      <div id="secimler" class="secimler" role="list"></div>
+    </div>
+    <div id="ilerle" class="ilerle" aria-hidden="true">devam</div>
+  </article>
+  <div id="portre" class="portre" hidden>
+    <div class="portre-foto" id="portreFoto"></div>
+    <span class="bant"></span>
+  </div>
+  <div id="notlar" class="notlar" aria-live="polite"></div>
+</section>
+
+<!-- Takvim yaprağı (bölüm kartı) -->
+<div id="takvim" class="katman" hidden>
+  <div class="takvim" id="takvimYaprak">
+    <div class="takvim-delik"><i></i><i></i></div>
+    <div class="takvim-ust"><span id="tkAy"></span><span id="tkYil"></span></div>
+    <div class="takvim-gun" id="tkGun"></div>
+    <div class="takvim-haftagunu" id="tkHafta"></div>
+    <div class="takvim-alt">
+      <div class="takvim-bolum" id="tkBolum"></div>
+      <div class="takvim-ad" id="tkAd"></div>
+      <p class="takvim-soz" id="tkSoz"></p>
+    </div>
+    <button class="takvim-btn el" id="tkBtn">Yaprağı kopar</button>
+  </div>
+</div>
+
+<!-- Defter etiketi (isim) -->
+<div id="etiket" class="katman" hidden>
+  <form class="etiket" id="etiketForm">
+    <div class="etiket-baslik">Defter</div>
+    <label>Adı <input id="adInput" maxlength="16" autocomplete="off" required placeholder="adını yaz"></label>
+    <label>Sınıfı <span>4-B</span></label>
+    <label>Okulu <span>Akasya İlkokulu</span></label>
+    <button class="el" type="submit">Tamam</button>
+  </form>
+</div>
+
+<!-- Paneller -->
+<div id="panel" class="katman" hidden>
+  <div class="panel" role="dialog" aria-modal="true" aria-labelledby="panelBaslik">
+    <header class="panel-ust">
+      <h2 id="panelBaslik"></h2>
+      <button class="ikon-btn" id="panelKapat" aria-label="Kapat"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </header>
+    <div class="panel-icerik" id="panelIcerik"></div>
+  </div>
+</div>
+
+<!-- Son -->
+<div id="sonEkran" class="katman koyu" hidden>
+  <div class="son-kart">
+    <div class="son-ust">Son</div>
+    <h2 id="sonAd"></h2>
+    <p id="sonOzet"></p>
+    <div class="son-kunye">Akasya Sokağı, 1996 · Bir Enskygr234 oyunu</div>
+    <div class="son-btnlar">
+      <button class="el" id="sonAnilar">Anı defterine bak</button>
+      <button class="el" id="sonMenu">Ana menüye dön</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/veri.js"></script>
+<script src="hikaye/1-haziran.js"></script>
+<script src="hikaye/2-temmuz.js"></script>
+<script src="hikaye/3-agustos.js"></script>
+<script src="hikaye/4-eylul.js"></script>
+<script src="hikaye/5-ekim.js"></script>
+<script src="hikaye/6-kasim.js"></script>
+<script src="js/sahne.js"></script>
+<script src="js/portre.js"></script>
+<script src="js/ses.js"></script>
+<script src="js/motor.js"></script>
+</body>
+</html>

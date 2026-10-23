@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>kar.js — web sayfana kar yağdır</title>
+<meta name="description" content="Tek dosya, bağımlılıksız kar yağışı. Bir satırla sayfana ekle.">
+<style>
+  :root { --mavi: #8ecae6; --koyu: #0b1626; --kart: rgba(255,255,255,.06); --cizgi: rgba(255,255,255,.14); }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; }
+  body {
+    font: 16px/1.6 "Segoe UI", system-ui, -apple-system, sans-serif;
+    color: #e8f1f8;
+    background: radial-gradient(1200px 600px at 50% -10%, #1d3a5c 0%, #0f2136 45%, var(--koyu) 100%) fixed;
+  }
+  main { max-width: 860px; margin: 0 auto; padding: 72px 16px 96px; position: relative; z-index: 1; }
+  h1 { font-size: clamp(44px, 10vw, 84px); margin: 0; letter-spacing: -2px; line-height: 1; }
+  h1 span { color: var(--mavi); }
+  .alt { font-size: clamp(17px, 3vw, 21px); color: #b9cfe0; margin: 14px 0 34px; max-width: 34em; }
+  .kart { background: var(--kart); border: 1px solid var(--cizgi); border-radius: 16px; padding: 22px; margin: 18px 0; backdrop-filter: blur(6px); }
+  h2 { font-size: 15px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--mavi); margin: 0 0 14px; }
+  .ayarlar { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px 24px; }
+  label { display: block; font-size: 14px; color: #b9cfe0; }
+  label b { float: right; color: #fff; font-variant-numeric: tabular-nums; }
+  input[type=range] { width: 100%; accent-color: var(--mavi); margin-top: 6px; }
+  input[type=color] { width: 100%; height: 34px; margin-top: 6px; border: 1px solid var(--cizgi); border-radius: 8px; background: transparent; padding: 2px; cursor: pointer; }
+  .satir { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+  button {
+    font: inherit; font-weight: 600; color: var(--koyu); background: var(--mavi);
+    border: 0; border-radius: 10px; padding: 9px 16px; cursor: pointer;
+  }
+  button.ikincil { background: transparent; color: #e8f1f8; border: 1px solid var(--cizgi); }
+  button:hover { filter: brightness(1.1); }
+  button:focus-visible, input:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+  pre {
+    margin: 0; padding: 16px; border-radius: 12px; background: #06101c; border: 1px solid var(--cizgi);
+    overflow-x: auto; font: 14px/1.55 Consolas, "Cascadia Code", monospace; color: #cfe6f5;
+  }
+  .kod-ust { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .kod-ust h2 { margin: 0; }
+  .kod-ust button { padding: 5px 12px; font-size: 13px; }
+  footer { margin-top: 40px; color: #8aa3b8; font-size: 14px; }
+  a { color: var(--mavi); }
+</style>
+</head>
+<body>
+<main>
+  <h1>kar<span>.js</span></h1>
+  <p class="alt">Web sayfana tek satırla kar yağdır. Tek dosya, bağımlılık yok, sıkıştırılınca yaklaşık 3 KB. İmleci karın içinde gezdir — taneler kaçışır.</p>
+
+  <section class="kart">
+    <h2>Dene</h2>
+    <div class="ayarlar">
+      <label>Tane sayısı <b id="adet-deger">150</b>
+        <input type="range" id="adet" min="0" max="800" step="10" value="150"></label>
+      <label>Hız <b id="hiz-deger">1.0</b>
+        <input type="range" id="hiz" min="0.2" max="4" step="0.1" value="1"></label>
+      <label>Rüzgâr <b id="ruzgar-deger">0.3</b>
+        <input type="range" id="ruzgar" min="-3" max="3" step="0.1" value="0.3"></label>
+      <label>En büyük tane <b id="enBuyuk-deger">3.6</b>
+        <input type="range" id="enBuyuk" min="1.5" max="9" step="0.1" value="3.6"></label>
+      <label>Renk
+        <input type="color" id="renk" value="#ffffff"></label>
+    </div>
+    <div class="satir">
+      <button id="dur">Durdur</button>
+      <button class="ikincil" id="tipi">Tipi çıkar</button>
+      <button class="ikincil" id="sifirla">Sıfırla</button>
+    </div>
+  </section>
+
+  <section class="kart">
+    <div class="kod-ust"><h2>Bu ayarlarla sayfana ekle</h2><button class="ikincil" id="kopyala">Kopyala</button></div>
+    <pre id="kod"></pre>
+  </section>
+
+  <footer>
+    Winterdeveloper
+  </footer>
+</main>
+
+<script src="kar.js"></script>
+<script>
+  var VARSAYILAN = { adet: 150, hiz: 1, ruzgar: 0.3, enBuyuk: 3.6, renk: '#ffffff' };
+  var kar = Kar.baslat({ zorla: true });
+  var alanlar = ['adet', 'hiz', 'ruzgar', 'enBuyuk', 'renk'];
+  var el = function (id) { return document.getElementById(id); };
+
+  function oku() {
+    return {
+      adet: +el('adet').value, hiz: +el('hiz').value, ruzgar: +el('ruzgar').value,
+      enBuyuk: +el('enBuyuk').value, renk: el('renk').value
+    };
+  }
+
+  function guncelle() {
+    var a = oku();
+    kar.ayarla(a);
+    el('adet-deger').textContent = a.adet;
+    el('hiz-deger').textContent = a.hiz.toFixed(1);
+    el('ruzgar-deger').textContent = a.ruzgar.toFixed(1);
+    el('enBuyuk-deger').textContent = a.enBuyuk.toFixed(1);
+
+    var farkli = alanlar.filter(function (k) { return a[k] !== VARSAYILAN[k]; });
+    var ayarMetni = farkli.map(function (k) {
+      return '    ' + k + ': ' + (k === 'renk' ? "'" + a[k] + "'" : a[k]);
+    }).join(',\n');
+    el('kod').textContent =
+      '<script src="https://cdn.jsdelivr.net/gh/Enskygr234/kar-js@v1.0.0/kar.js"><\/script>\n' +
+      '<script>\n' +
+      (farkli.length ? '  Kar.baslat({\n' + ayarMetni + '\n  });\n' : '  Kar.baslat();\n') +
+      '<\/script>';
+  }
+
+  function yaz(a) {
+    alanlar.forEach(function (k) { el(k).value = a[k]; });
+    guncelle();
+  }
+
+  alanlar.forEach(function (k) { el(k).addEventListener('input', guncelle); });
+
+  el('dur').addEventListener('click', function () {
+    if (kar.calisiyor) { kar.durdur(); this.textContent = 'Devam et'; }
+    else { kar.devam(); this.textContent = 'Durdur'; }
+  });
+  el('tipi').addEventListener('click', function () {
+    yaz({ adet: 650, hiz: 2.6, ruzgar: 2.4, enBuyuk: 3, renk: el('renk').value });
+  });
+  el('sifirla').addEventListener('click', function () { yaz(VARSAYILAN); });
+  el('kopyala').addEventListener('click', function () {
+    var dugme = this;
+    navigator.clipboard.writeText(el('kod').textContent).then(function () {
+      dugme.textContent = 'Kopyalandı ✓';
+      setTimeout(function () { dugme.textContent = 'Kopyala'; }, 1500);
+    });
+  });
+
+  guncelle();
+</script>
+</body>
+</html>

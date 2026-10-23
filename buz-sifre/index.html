@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Buz Şifre — akılda kalan güçlü şifreler</title>
+<meta name="description" content="Türkçe kelimelerden akılda kalan, kırılması zor şifreler üretir. Her şey tarayıcında olur; hiçbir şifre bir yere gönderilmez.">
+<meta name="theme-color" content="#0b1626">
+<style>
+  :root { --zemin: #0b1626; --kart: rgba(255,255,255,.06); --cizgi: rgba(255,255,255,.14); --yazi: #e8f1f8; --soluk: #8aa3b8; --buz: #4fb3e0; --kor: #f0a03c; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font: 16px/1.55 "Segoe UI", system-ui, -apple-system, Roboto, sans-serif; color: var(--yazi);
+    background: radial-gradient(1100px 560px at 50% -10%, #1d3a5c 0%, #0f2136 45%, var(--zemin) 100%) fixed var(--zemin);
+    min-height: 100vh;
+  }
+  main { max-width: 720px; margin: 0 auto; padding: 48px 16px 64px; }
+  h1 { font-size: clamp(34px, 8vw, 52px); margin: 0; letter-spacing: -1px; line-height: 1.05; }
+  h1 span { color: var(--buz); }
+  .alt { color: #b9cfe0; margin: 10px 0 26px; font-size: 17px; }
+  .sekmeler { display: inline-flex; background: var(--kart); border: 1px solid var(--cizgi); border-radius: 12px; padding: 3px; margin-bottom: 16px; }
+  .sekmeler button { border: 0; background: transparent; color: var(--soluk); padding: 8px 14px; border-radius: 9px; font: inherit; font-size: 14px; cursor: pointer; }
+  .sekmeler button[aria-selected="true"] { background: var(--buz); color: #06121f; font-weight: 700; }
+
+  .cikti { background: #06101c; border: 1px solid var(--cizgi); border-radius: 16px; padding: 20px; position: relative; }
+  #sifre {
+    font: 600 clamp(20px, 5vw, 28px)/1.4 Consolas, "Cascadia Mono", ui-monospace, monospace;
+    word-break: break-all; min-height: 1.4em; margin: 0 0 16px; user-select: all;
+  }
+  #sifre .r { color: var(--kor); }        /* rakam */
+  #sifre .s { color: #ff8fa3; }           /* sembol */
+  #sifre .a { color: #6f8aa5; }           /* ayraç */
+  .eylemler { display: flex; gap: 8px; flex-wrap: wrap; }
+  button.d { font: inherit; font-weight: 700; font-size: 15px; border-radius: 10px; padding: 10px 18px; cursor: pointer; border: 1px solid var(--cizgi); background: var(--kart); color: var(--yazi); }
+  button.d.ana { background: var(--buz); color: #06121f; border-color: transparent; }
+  button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+  .guc { margin-top: 18px; }
+  .guc-cubuk { height: 8px; border-radius: 4px; background: rgba(255,255,255,.1); overflow: hidden; }
+  .guc-cubuk i { display: block; height: 100%; width: 0; border-radius: 4px; transition: width .3s, background .3s; }
+  .guc-satir { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; font-size: 14px; margin-top: 6px; color: var(--soluk); }
+  .guc-satir b { color: var(--yazi); }
+
+  .ayarlar { margin-top: 18px; background: var(--kart); border: 1px solid var(--cizgi); border-radius: 16px; padding: 18px 20px; display: grid; gap: 14px; }
+  .ayarlar[hidden] { display: none; }
+  label.satir { display: flex; align-items: center; justify-content: space-between; gap: 14px; font-size: 15px; }
+  label.satir small { display: block; color: var(--soluk); font-size: 13px; }
+  input[type=range] { width: min(240px, 45vw); accent-color: var(--buz); }
+  input[type=checkbox] { width: 20px; height: 20px; accent-color: var(--buz); }
+  select { font: inherit; font-size: 14px; color: var(--yazi); background: #12263a; border: 1px solid var(--cizgi); border-radius: 8px; padding: 5px 8px; }
+  output { font-weight: 700; color: var(--buz); min-width: 2ch; display: inline-block; text-align: right; }
+
+  .bilgi { margin-top: 30px; color: #b9cfe0; font-size: 15px; }
+  .bilgi h2 { font-size: 15px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--buz); margin: 24px 0 8px; }
+  .bilgi p { margin: 0 0 10px; }
+  footer { margin-top: 36px; color: var(--soluk); font-size: 14px; }
+  a { color: var(--buz); }
+  .bildirim { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: #fff; color: #0b1626; font-weight: 700; padding: 9px 16px; border-radius: 10px; opacity: 0; transition: opacity .2s; pointer-events: none; }
+  .bildirim.goster { opacity: 1; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Buz <span>Şifre</span></h1>
+  <p class="alt">Akılda kalan ama kırılması zor şifreler. Her şey tarayıcında üretilir; hiçbir şifre bir yere gönderilmez.</p>
+
+  <div class="sekmeler" role="tablist">
+    <button role="tab" data-mod="kelime" aria-selected="true">🧠 Akılda kalır</button>
+    <button role="tab" data-mod="karakter" aria-selected="false">🎲 Rastgele karakter</button>
+  </div>
+
+  <section class="cikti" aria-live="polite">
+    <p id="sifre"></p>
+    <div class="eylemler">
+      <button class="d ana" id="kopyala">Kopyala</button>
+      <button class="d" id="yenile">↻ Yenisini üret</button>
+    </div>
+    <div class="guc">
+      <div class="guc-cubuk"><i id="gucCubuk"></i></div>
+      <div class="guc-satir"><span>Güç: <b id="gucAd"></b> · <span id="bit"></span></span><span id="sure"></span></div>
+    </div>
+  </section>
+
+  <section class="ayarlar" id="ayarKelime">
+    <label class="satir"><span>Kelime sayısı <small>Her kelime yaklaşık 10,4 bit güç katar</small></span>
+      <span><input type="range" id="kelimeSayisi" min="3" max="8" value="6"> <output id="kelimeSayisiYaz">6</output></span></label>
+    <label class="satir"><span>Ayraç</span>
+      <select id="ayrac">
+        <option value="-">tire  ( kar-buz )</option>
+        <option value=".">nokta  ( kar.buz )</option>
+        <option value="_">alt çizgi  ( kar_buz )</option>
+        <option value=" ">boşluk  ( kar buz )</option>
+        <option value="#">rastgele rakam  ( kar4buz )</option>
+      </select></label>
+    <label class="satir"><span>Kelimeler büyük harfle başlasın</span><input type="checkbox" id="buyuk" checked></label>
+    <label class="satir"><span>Sona iki rakam ekle</span><input type="checkbox" id="rakam" checked></label>
+    <label class="satir"><span>Türkçe harfleri sadeleştir <small>ı→i, ş→s, ğ→g… Türkçe karakter kabul etmeyen siteler için</small></span><input type="checkbox" id="sade" checked></label>
+  </section>
+
+  <section class="ayarlar" id="ayarKarakter" hidden>
+    <label class="satir"><span>Uzunluk</span>
+      <span><input type="range" id="uzunluk" min="8" max="64" value="20"> <output id="uzunlukYaz">20</output></span></label>
+    <label class="satir"><span>Küçük harf (a-z)</span><input type="checkbox" id="kk" checked></label>
+    <label class="satir"><span>Büyük harf (A-Z)</span><input type="checkbox" id="bk" checked></label>
+    <label class="satir"><span>Rakam (0-9)</span><input type="checkbox" id="rk" checked></label>
+    <label class="satir"><span>Sembol (!@#…)</span><input type="checkbox" id="sm" checked></label>
+    <label class="satir"><span>Karışan harfleri çıkar <small>0 O o, 1 l I gibi</small></span><input type="checkbox" id="karisan" checked></label>
+  </section>
+
+  <div class="bilgi">
+    <h2>Neden kelimeler?</h2>
+    <p>"<b>Kızak-Fener-Ayva-Lale-Çorba42</b>" gibi bir şifreyi akılda tutmak, "<b>x7#Qp!2v</b>" gibi bir şifreyi tutmaktan çok daha kolaydır; üstelik kelime sayısı arttıkça kırılması çok daha zorlaşır.</p>
+    <h2>Güç nasıl hesaplanıyor?</h2>
+    <p>Kelimeler <span id="listeBoyu"></span> kelimelik bir listeden, kriptografik rastgelelikle (<code>crypto.getRandomValues</code>) seçilir. Güç, saldırganın listeyi ve kuralları bildiği en kötü durum için hesaplanır. Kırılma süresi, saniyede 10 milyar tahmin yapabilen güçlü bir bilgisayar varsayımıyla kaba bir tahmindir.</p>
+    <h2>İpuçları</h2>
+    <p>Her site için ayrı şifre kullan; önemli hesaplarda iki adımlı doğrulamayı aç. Çok şifren varsa bir şifre yöneticisi işini kolaylaştırır.</p>
+  </div>
+
+  <footer>Winterdeveloper</footer>
+</main>
+<div class="bildirim" id="bildirim">Kopyalandı ✓</div>
+
+<script src="kelimeler.js"></script>
+<script>
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const SADE = { "ç": "c", "ğ": "g", "ı": "i", "ö": "o", "ş": "s", "ü": "u", "Ç": "C", "Ğ": "G", "İ": "I", "Ö": "O", "Ş": "S", "Ü": "U" };
+  let mod = "kelime";
+
+  // 0..n-1 arası eşit olasılıklı rastgele sayı (modulo yanlılığı olmadan)
+  function zar(n) {
+    const sinir = Math.floor(0x100000000 / n) * n;
+    const kutu = new Uint32Array(1);
+    do crypto.getRandomValues(kutu); while (kutu[0] >= sinir);
+    return kutu[0] % n;
+  }
+
+  function kelimeSifresi() {
+    const n = +$("kelimeSayisi").value, ayrac = $("ayrac").value;
+    const parcalar = [];   // { metin, tur }  tur: k kelime, a ayraç, r rakam
+    let bit = n * Math.log2(KELIMELER.length);
+    for (let i = 0; i < n; i++) {
+      let k = KELIMELER[zar(KELIMELER.length)];
+      if ($("buyuk").checked) k = k.charAt(0).toLocaleUpperCase("tr-TR") + k.slice(1);
+      if ($("sade").checked) k = k.replace(/[çğıöşüÇĞİÖŞÜ]/g, h => SADE[h]);
+      if (i > 0) {
+        if (ayrac === "#") { parcalar.push({ metin: String(zar(10)), tur: "r" }); bit += Math.log2(10); }
+        else parcalar.push({ metin: ayrac, tur: "a" });
+      }
+      parcalar.push({ metin: k, tur: "k" });
+    }
+    if ($("rakam").checked) { parcalar.push({ metin: String(zar(10)) + zar(10), tur: "r" }); bit += Math.log2(100); }
+    return { parcalar, bit };
+  }
+
+  function karakterSifresi() {
+    const karisan = $("karisan").checked;
+    const temizle = s => karisan ? s.replace(/[0Oo1lI]/g, "") : s;
+    const kumeler = [];
+    if ($("kk").checked) kumeler.push(temizle("abcdefghijklmnopqrstuvwxyz"));
+    if ($("bk").checked) kumeler.push(temizle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"));
+    if ($("rk").checked) kumeler.push(temizle("0123456789"));
+    if ($("sm").checked) kumeler.push("!@#$%&*+-=?^_~.,:;");
+    if (!kumeler.length) { $("kk").checked = true; return karakterSifresi(); }
+    const hepsi = kumeler.join(""), n = +$("uzunluk").value;
+    let dizi;
+    // Seçilen her türden en az bir karakter olsun
+    do {
+      dizi = Array.from({ length: n }, () => hepsi[zar(hepsi.length)]);
+    } while (n >= kumeler.length && !kumeler.every(k => dizi.some(h => k.includes(h))));
+    const parcalar = dizi.map(h => ({ metin: h, tur: /[0-9]/.test(h) ? "r" : /[a-zA-Z]/.test(h) ? "k" : "s" }));
+    return { parcalar, bit: n * Math.log2(hepsi.length) };
+  }
+
+  function sure(bit) {
+    // ortalama: olası şifrelerin yarısı denenince bulunur
+    const saniye = Math.pow(2, bit - 1) / 1e10;
+    const birimler = [[60, "saniye"], [60, "dakika"], [24, "saat"], [365.25, "gün"], [1000, "yıl"], [1000, "bin yıl"], [1000, "milyon yıl"], [Infinity, "milyar yıl"]];
+    let deger = saniye, ad = "saniye";
+    if (saniye < 1) return "anında kırılır";
+    for (const [bolen, birim] of birimler) {
+      ad = birim;
+      if (deger < bolen) break;
+      deger /= bolen;
+    }
+    if (ad === "milyar yıl" && deger > 1000) return "evrenin yaşından çok daha uzun";
+    return "kırılması ~" + Math.round(deger).toLocaleString("tr-TR") + " " + ad;
+  }
+
+  function uret() {
+    const { parcalar, bit } = mod === "kelime" ? kelimeSifresi() : karakterSifresi();
+    const el = $("sifre");
+    el.textContent = "";
+    for (const p of parcalar) {
+      const s = document.createElement("span");
+      if (p.tur !== "k") s.className = p.tur;
+      s.textContent = p.metin;
+      el.appendChild(s);
+    }
+    const seviye = bit < 40 ? ["Zayıf", "#ff6b81", 20] : bit < 60 ? ["Orta", "#f0a03c", 50] : bit < 80 ? ["Güçlü", "#7ad18f", 78] : ["Çok güçlü", "#4fb3e0", 100];
+    $("gucAd").textContent = seviye[0];
+    $("gucCubuk").style.width = Math.min(100, bit / 1.1) + "%";
+    $("gucCubuk").style.background = seviye[1];
+    $("bit").textContent = Math.round(bit) + " bit";
+    $("sure").textContent = sure(bit);
+  }
+
+  document.querySelectorAll("[data-mod]").forEach(d => d.addEventListener("click", () => {
+    mod = d.dataset.mod;
+    document.querySelectorAll("[data-mod]").forEach(x => x.setAttribute("aria-selected", String(x === d)));
+    $("ayarKelime").hidden = mod !== "kelime";
+    $("ayarKarakter").hidden = mod !== "karakter";
+    uret();
+  }));
+  document.querySelectorAll(".ayarlar input, .ayarlar select").forEach(el => el.addEventListener("input", () => {
+    $("kelimeSayisiYaz").textContent = $("kelimeSayisi").value;
+    $("uzunlukYaz").textContent = $("uzunluk").value;
+    uret();
+  }));
+  $("yenile").onclick = uret;
+  $("kopyala").onclick = async () => {
+    try { await navigator.clipboard.writeText($("sifre").textContent); }
+    catch { getSelection().selectAllChildren($("sifre")); document.execCommand("copy"); }
+    $("bildirim").classList.add("goster");
+    setTimeout(() => $("bildirim").classList.remove("goster"), 1400);
+  };
+  $("listeBoyu").textContent = KELIMELER.length.toLocaleString("tr-TR");
+  uret();
+
+  // Testler için
+  window.BuzSifre = { zar, kelimeSifresi, karakterSifresi, sure };
+</script>
+</body>
+</html>

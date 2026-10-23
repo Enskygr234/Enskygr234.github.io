@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>XOX Oyunu</title>
+<style>
+  :root { --bg:#1a1b2e; --cell:#26284a; --text:#f0f0ff; --x:#ff6b8b; --o:#5ce1e6; --muted:#9a9cc4; }
+  * { box-sizing:border-box; }
+  body { margin:0; min-height:100vh; font-family:system-ui,sans-serif; background:var(--bg); color:var(--text); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:16px; }
+  h1 { margin:0 0 8px; letter-spacing:2px; }
+  .opts { display:flex; gap:8px; margin-bottom:12px; }
+  .opts button, #restart { background:var(--cell); color:var(--muted); border:1px solid #3a3d6b; padding:8px 12px; border-radius:8px; cursor:pointer; }
+  .opts button.active { color:var(--text); border-color:var(--o); }
+  #status { height:28px; font-size:1.1rem; margin-bottom:12px; }
+  .board { display:grid; grid-template-columns:repeat(3, min(28vw, 110px)); gap:8px; }
+  .cell { aspect-ratio:1; background:var(--cell); border:0; border-radius:12px; font-size:min(16vw, 64px); font-weight:800; cursor:pointer; color:var(--text); transition:transform .1s; }
+  .cell:hover:not(:disabled) { transform:scale(1.04); }
+  .cell.X { color:var(--x); } .cell.O { color:var(--o); }
+  .cell.win { background:#3b3f7a; }
+  .score { display:flex; gap:24px; margin:16px 0; color:var(--muted); }
+  .score b { color:var(--text); }
+</style>
+</head>
+<body>
+  <h1>XOX</h1>
+  <div class="opts">
+    <button data-mode="ai" class="active">🤖 Bilgisayara karşı</button>
+    <button data-mode="pvp">👥 İki kişilik</button>
+  </div>
+  <div id="status"></div>
+  <div class="board" id="board"></div>
+  <div class="score">
+    <span>X: <b id="sx">0</b></span>
+    <span>Berabere: <b id="sd">0</b></span>
+    <span>O: <b id="so">0</b></span>
+  </div>
+  <button id="restart">Yeni Oyun</button>
+<script>
+  const LINES = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+  const boardEl = document.getElementById('board');
+  const status = document.getElementById('status');
+  let board, turn, over, aiTimer, mode = 'ai';
+  const score = { X: 0, O: 0, D: 0 };
+
+  const cells = Array.from({ length: 9 }, (_, i) => {
+    const b = document.createElement('button');
+    b.className = 'cell';
+    b.onclick = () => play(i);
+    boardEl.append(b);
+    return b;
+  });
+
+  function winner(b) {
+    for (const l of LINES) if (b[l[0]] && b[l[0]] === b[l[1]] && b[l[0]] === b[l[2]]) return { p: b[l[0]], line: l };
+    return b.every(Boolean) ? { p: 'D' } : null;
+  }
+
+  // Minimax: O (bilgisayar) asla kaybetmez
+  function minimax(b, player, depth) {
+    const w = winner(b);
+    if (w) return { s: w.p === 'O' ? 10 - depth : w.p === 'X' ? depth - 10 : 0 };
+    let best = { s: player === 'O' ? -Infinity : Infinity };
+    b.forEach((v, i) => {
+      if (v) return;
+      b[i] = player;
+      const r = minimax(b, player === 'O' ? 'X' : 'O', depth + 1);
+      b[i] = null;
+      if (player === 'O' ? r.s > best.s : r.s < best.s) best = { s: r.s, i };
+    });
+    return best;
+  }
+
+  function draw() {
+    cells.forEach((c, i) => {
+      c.textContent = board[i] || '';
+      c.className = 'cell ' + (board[i] || '');
+      c.disabled = over || !!board[i];
+    });
+  }
+
+  function finish(w) {
+    over = true;
+    score[w.p]++;
+    document.getElementById('sx').textContent = score.X;
+    document.getElementById('so').textContent = score.O;
+    document.getElementById('sd').textContent = score.D;
+    status.textContent = w.p === 'D' ? 'Berabere! 🤝' : `${w.p} kazandı! 🎉`;
+    draw();
+    if (w.line) w.line.forEach(i => cells[i].classList.add('win'));
+  }
+
+  function play(i) {
+    if (over || board[i]) return;
+    board[i] = turn;
+    const w = winner(board);
+    if (w) return finish(w);
+    turn = turn === 'X' ? 'O' : 'X';
+    status.textContent = `Sıra: ${turn}`;
+    draw();
+    if (mode === 'ai' && turn === 'O') {
+      over = true; draw();  // bilgisayar düşünürken tıklamayı kilitle
+      aiTimer = setTimeout(() => { over = false; play(minimax([...board], 'O', 0).i); }, 350);
+    }
+  }
+
+  function reset() {
+    clearTimeout(aiTimer);
+    board = Array(9).fill(null);
+    turn = 'X'; over = false;
+    status.textContent = 'Sıra: X';
+    draw();
+  }
+
+  document.querySelectorAll('.opts button').forEach(b => b.onclick = () => {
+    mode = b.dataset.mode;
+    document.querySelectorAll('.opts button').forEach(x => x.classList.toggle('active', x === b));
+    Object.keys(score).forEach(k => score[k] = 0);
+    ['sx', 'so', 'sd'].forEach(id => document.getElementById(id).textContent = 0);
+    reset();
+  });
+  document.getElementById('restart').onclick = reset;
+  reset();
+</script>
+</body>
+</html>

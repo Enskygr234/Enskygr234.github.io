@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nardugan'a ne kadar kaldı?</title>
+<meta name="description" content="Yılın en uzun gecesine, kış gündönümüne canlı geri sayım ve bugünün gün uzunluğu.">
+<style>
+  :root { --mavi: #8ecae6; --kor: #ffb347; --koyu: #0b1626; --kart: rgba(255,255,255,.06); --cizgi: rgba(255,255,255,.14); }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; }
+  body {
+    font: 16px/1.6 "Segoe UI", system-ui, -apple-system, sans-serif;
+    color: #e8f1f8;
+    background: radial-gradient(1200px 600px at 50% -10%, #1d3a5c 0%, #0f2136 45%, var(--koyu) 100%) fixed;
+  }
+  main { max-width: 820px; margin: 0 auto; padding: 56px 16px 80px; text-align: center; position: relative; z-index: 1; }
+  .ust { color: var(--mavi); text-transform: uppercase; letter-spacing: 3px; font-size: 14px; margin: 0; }
+  h1 { font-size: clamp(34px, 7vw, 60px); margin: 6px 0 0; letter-spacing: -1.5px; line-height: 1.08; }
+  h1 span { color: var(--kor); }
+  .sayac { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 34px auto 14px; max-width: 620px; }
+  .kutu { background: var(--kart); border: 1px solid var(--cizgi); border-radius: 16px; padding: 18px 4px 12px; }
+  .kutu b { display: block; font-size: clamp(34px, 9vw, 64px); line-height: 1; font-variant-numeric: tabular-nums; }
+  .kutu small { color: #b9cfe0; text-transform: uppercase; letter-spacing: 1.5px; font-size: 12px; }
+  .an { color: #b9cfe0; margin: 0 0 30px; }
+  .an strong { color: #fff; font-weight: 600; }
+  .kart { background: var(--kart); border: 1px solid var(--cizgi); border-radius: 16px; padding: 22px; margin: 16px 0; text-align: left; }
+  h2 { font-size: 15px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--mavi); margin: 0 0 12px; }
+  .cubuk { height: 14px; border-radius: 7px; background: rgba(255,255,255,.1); overflow: hidden; }
+  .cubuk i { display: block; height: 100%; width: 0; border-radius: 7px; background: linear-gradient(90deg, #8ecae6, #ffb347); }
+  .uclar { display: flex; justify-content: space-between; font-size: 13px; color: #8aa3b8; margin-top: 6px; }
+  .baslik-satir { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+  .baslik-satir h2 { margin: 0; }
+  select {
+    font: inherit; color: #fff; background: #12263a; border: 1px solid var(--cizgi); border-radius: 10px; padding: 6px 10px;
+  }
+  select:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+  .gun { font-size: clamp(26px, 6vw, 38px); font-weight: 700; margin: 0; line-height: 1.2; }
+  .gun small { font-size: 16px; font-weight: 400; color: #b9cfe0; }
+  ul { margin: 12px 0 0; padding-left: 20px; color: #cfe0ec; }
+  p { margin: 0 0 10px; color: #cfe0ec; }
+  p:last-child { margin-bottom: 0; }
+  footer { margin-top: 36px; color: #8aa3b8; font-size: 14px; }
+  a { color: var(--mavi); }
+  @media (max-width: 420px) { .sayac { gap: 6px; } .kutu small { font-size: 10px; letter-spacing: .5px; } }
+</style>
+</head>
+<body>
+<main>
+  <p class="ust">Yılın en uzun gecesine</p>
+  <h1 id="baslik"><span>Nardugan</span>'a ne kadar kaldı?</h1>
+
+  <div class="sayac" role="timer" aria-label="Kış gündönümüne kalan süre">
+    <div class="kutu"><b id="gun">–</b><small>gün</small></div>
+    <div class="kutu"><b id="saat">–</b><small>saat</small></div>
+    <div class="kutu"><b id="dakika">–</b><small>dakika</small></div>
+    <div class="kutu"><b id="saniye">–</b><small>saniye</small></div>
+  </div>
+  <p class="an">Kış gündönümü: <strong id="an"></strong> <span id="dilim"></span></p>
+
+  <section class="kart">
+    <h2>Güneşin yolculuğu</h2>
+    <div class="cubuk"><i id="ilerleme"></i></div>
+    <div class="uclar"><span id="onceki"></span><span id="yuzde"></span><span id="sonraki"></span></div>
+  </section>
+
+  <section class="kart">
+    <div class="baslik-satir">
+      <h2>Bugün gün ne kadar sürüyor?</h2>
+      <select id="sehir" aria-label="Şehir"></select>
+    </div>
+    <p class="gun" id="uzunluk"></p>
+    <ul>
+      <li id="degisim"></li>
+      <li id="enKisa"></li>
+    </ul>
+  </section>
+
+  <section class="kart">
+    <h2>Nardugan nedir?</h2>
+    <p>Nardugan, Türk halklarının kış gündönümünde kutladığı eski bir bayramdır. Adı genellikle "doğan güneş" diye açıklanır: yılın en uzun gecesi biter, günler yeniden uzamaya başlar.</p>
+    <p>Bu sayfa gündönümü anını astronomik olarak hesaplar; Güneş'in gökyüzünde en güneye ulaştığı an, hata payı bir dakikanın altında.</p>
+  </section>
+
+  <footer>
+    kar yağışı: <a href="https://enskygr234.github.io/kar-js/">kar.js</a> · Winterdeveloper
+  </footer>
+</main>
+
+<script src="gundonumu.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/Enskygr234/kar-js@v1.0.0/kar.js"></script>
+<script>
+  var SEHIRLER = [
+    ['Ankara', 39.93], ['İstanbul', 41.01], ['İzmir', 38.42], ['Antalya', 36.89], ['Bursa', 40.19],
+    ['Erzurum', 39.90], ['Kars', 40.60], ['Trabzon', 41.00], ['Diyarbakır', 37.91], ['Sinop', 42.03],
+    ['Hatay', 36.20], ['Kazan', 55.79], ['Bakü', 40.41], ['Taşkent', 41.30], ['Tromsø', 69.65]
+  ];
+  var el = function (id) { return document.getElementById(id); };
+  var iki = function (n) { return n < 10 ? '0' + n : '' + n; };
+  var GUN_MS = 86400000;
+
+  function sure(saat) {
+    var dk = Math.round(saat * 60);
+    return Math.floor(dk / 60) + ' sa ' + (dk % 60) + ' dk';
+  }
+  function tarih(d, secenek) { return d.toLocaleDateString('tr-TR', secenek); }
+
+  function sayaciGuncelle() {
+    var simdi = new Date();
+    var hedef = Gundonumu.sonrakiKisGundonumu(simdi);
+    var onceki = Gundonumu.oncekiKisGundonumu(simdi);
+    var kalan = Math.max(0, Math.floor((hedef - simdi) / 1000));
+
+    el('gun').textContent = Math.floor(kalan / 86400);
+    el('saat').textContent = iki(Math.floor(kalan % 86400 / 3600));
+    el('dakika').textContent = iki(Math.floor(kalan % 3600 / 60));
+    el('saniye').textContent = iki(kalan % 60);
+
+    // gündönümünden sonraki ilk gün: kutlama başlığı
+    el('baslik').innerHTML = simdi - onceki < GUN_MS
+      ? 'Bugün <span>Nardugan</span>! Günler uzuyor.'
+      : "<span>Nardugan</span>'a ne kadar kaldı?";
+
+    el('an').textContent = tarih(hedef, { day: 'numeric', month: 'long', year: 'numeric', weekday: 'long' }) +
+      ', ' + hedef.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+    el('dilim').textContent = '(senin saatinle)';
+
+    var oran = (simdi - onceki) / (hedef - onceki);
+    el('ilerleme').style.width = (oran * 100).toFixed(2) + '%';
+    el('yuzde').textContent = 'yolun %' + Math.floor(oran * 100) + "'i geride";
+    el('onceki').textContent = tarih(onceki, { day: 'numeric', month: 'short', year: 'numeric' });
+    el('sonraki').textContent = tarih(hedef, { day: 'numeric', month: 'short', year: 'numeric' });
+  }
+
+  function gunuGuncelle() {
+    var sehir = SEHIRLER[el('sehir').selectedIndex];
+    var simdi = new Date();
+    var bugun = Gundonumu.gunUzunlugu(sehir[1], simdi);
+    var dun = Gundonumu.gunUzunlugu(sehir[1], new Date(simdi - GUN_MS));
+    var kisin = Gundonumu.gunUzunlugu(sehir[1], Gundonumu.sonrakiKisGundonumu(simdi));
+
+    el('uzunluk').innerHTML = '';
+    el('uzunluk').append(bugun === 0 ? 'Güneş doğmuyor' : bugun === 24 ? 'Güneş batmıyor' : sure(bugun));
+    var kucuk = document.createElement('small');
+    kucuk.textContent = ' · ' + sehir[0];
+    el('uzunluk').append(kucuk);
+
+    var fark = Math.round((bugun - dun) * 60 * 10) / 10;
+    el('degisim').textContent = fark === 0 ? 'Düne göre neredeyse aynı.'
+      : 'Düne göre ' + Math.abs(fark).toLocaleString('tr-TR') + ' dakika ' + (fark < 0 ? 'kısaldı.' : 'uzadı.');
+    el('enKisa').textContent = kisin === 0
+      ? 'Gündönümünde burada güneş hiç doğmayacak.'
+      : 'En kısa gün ' + sure(kisin) + ' sürecek; bugün ondan ' + sure(Math.max(0, bugun - kisin)) + ' uzun.';
+    try { localStorage.setItem('nardugan-sehir', sehir[0]); } catch (e) { /* gizli sekme */ }
+  }
+
+  SEHIRLER.forEach(function (s) { el('sehir').add(new Option(s[0])); });
+  try {
+    var kayitli = localStorage.getItem('nardugan-sehir');
+    SEHIRLER.forEach(function (s, i) { if (s[0] === kayitli) el('sehir').selectedIndex = i; });
+  } catch (e) { /* gizli sekme */ }
+  el('sehir').addEventListener('change', gunuGuncelle);
+
+  sayaciGuncelle();
+  gunuGuncelle();
+  setInterval(sayaciGuncelle, 1000);
+  setInterval(gunuGuncelle, 3600000);
+
+  // kar.js yüklenemezse sayfa karsız da çalışır
+  if (window.Kar) Kar.baslat({ adet: 110, hiz: 0.7 });
+</script>
+</body>
+</html>

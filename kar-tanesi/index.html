@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kar Tanesi — adını yaz, kar tanen çıksın</title>
+<meta name="description" content="Her metinden kendine özgü bir kar tanesi üretir. SVG ya da PNG olarak indir.">
+<style>
+  :root { --mavi: #8ecae6; --koyu: #0b1626; --kart: rgba(255,255,255,.06); --cizgi: rgba(255,255,255,.14); }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; }
+  body {
+    font: 16px/1.6 "Segoe UI", system-ui, -apple-system, sans-serif;
+    color: #e8f1f8;
+    background: radial-gradient(1200px 600px at 50% -10%, #1d3a5c 0%, #0f2136 45%, var(--koyu) 100%) fixed;
+  }
+  main { max-width: 860px; margin: 0 auto; padding: 56px 16px 80px; text-align: center; }
+  h1 { font-size: clamp(36px, 8vw, 64px); margin: 0; letter-spacing: -1.5px; line-height: 1.05; }
+  h1 span { color: var(--mavi); }
+  .alt { color: #b9cfe0; margin: 12px auto 28px; max-width: 30em; font-size: 18px; }
+  #sahne { width: min(100%, 420px); aspect-ratio: 1; margin: 0 auto; filter: drop-shadow(0 0 22px rgba(142,202,230,.45)); }
+  #sahne svg { width: 100%; height: 100%; display: block; animation: don 60s linear infinite; }
+  @keyframes don { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { #sahne svg { animation: none; } }
+  .giris { display: flex; gap: 10px; max-width: 460px; margin: 26px auto 0; }
+  input[type=text] {
+    flex: 1; min-width: 0; font: inherit; font-size: 18px; color: #fff; text-align: center;
+    background: var(--kart); border: 1px solid var(--cizgi); border-radius: 12px; padding: 11px 14px;
+  }
+  input[type=text]::placeholder { color: #7f98ad; }
+  button {
+    font: inherit; font-weight: 600; color: var(--koyu); background: var(--mavi);
+    border: 0; border-radius: 12px; padding: 10px 16px; cursor: pointer; white-space: nowrap;
+  }
+  button.ikincil { background: transparent; color: #e8f1f8; border: 1px solid var(--cizgi); }
+  button:hover { filter: brightness(1.1); }
+  button:focus-visible, input:focus-visible, .kucuk:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+  .satir { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px; margin-top: 14px; }
+  .renk { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; color: #b9cfe0; }
+  input[type=color] { width: 38px; height: 34px; border: 1px solid var(--cizgi); border-radius: 8px; background: transparent; padding: 2px; cursor: pointer; }
+  h2 { font-size: 15px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--mavi); margin: 48px 0 14px; }
+  #galeri { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 12px; }
+  .kucuk {
+    background: var(--kart); border: 1px solid var(--cizgi); border-radius: 14px; padding: 10px 8px 6px;
+    cursor: pointer; color: #b9cfe0; font-size: 12px; font-weight: 400; overflow: hidden;
+  }
+  .kucuk svg { width: 100%; height: auto; display: block; }
+  .kucuk span { display: block; margin-top: 4px; overflow: hidden; text-overflow: ellipsis; }
+  footer { margin-top: 44px; color: #8aa3b8; font-size: 14px; }
+  a { color: var(--mavi); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Kar <span>Tanesi</span></h1>
+  <p class="alt">Adını yaz, kar tanen çıksın. Aynı yazı hep aynı taneyi verir; başka yazı, başka tane.</p>
+
+  <div id="sahne" aria-live="polite"></div>
+
+  <div class="giris">
+    <input type="text" id="metin" maxlength="60" placeholder="adını yaz" aria-label="Kar tanesinin yazısı" autocomplete="off" spellcheck="false">
+    <button id="rastgele">Rastgele</button>
+  </div>
+  <div class="satir">
+    <label class="renk">Renk <input type="color" id="renk" value="#bfe6ff"></label>
+    <button class="ikincil" id="svg">SVG indir</button>
+    <button class="ikincil" id="png">PNG indir</button>
+    <button class="ikincil" id="paylas">Bağlantıyı kopyala</button>
+  </div>
+
+  <h2>Bugün yağanlar</h2>
+  <div id="galeri"></div>
+
+  <footer>
+    Winterdeveloper
+  </footer>
+</main>
+
+<script src="kartanesi.js"></script>
+<script>
+  var SOZCUKLER = ['ayaz', 'tipi', 'kırağı', 'buz', 'çığ', 'sarkıt', 'lapa', 'bora', 'zemheri', 'karakış',
+    'kardelen', 'boran', 'nardugan', 'kızak', 'ocak', 'şubat', 'poyraz', 'kar', 'don', 'fener'];
+  var el = function (id) { return document.getElementById(id); };
+  var metin = el('metin'), renk = el('renk');
+
+  function rastgeleSozcuk() {
+    return SOZCUKLER[Math.floor(Math.random() * SOZCUKLER.length)] + '-' + Math.floor(Math.random() * 900 + 100);
+  }
+
+  function ciz() {
+    var yazi = metin.value;
+    el('sahne').innerHTML = KarTanesi.uret(yazi, { renk: renk.value });
+    history.replaceState(null, '', yazi ? '#' + encodeURIComponent(yazi) : location.pathname);
+  }
+
+  function sec(yazi) { metin.value = yazi; ciz(); }
+
+  function indir(veri, ad) {
+    var a = document.createElement('a');
+    a.href = veri; a.download = ad;
+    document.body.appendChild(a); a.click(); a.remove();
+  }
+
+  function dosyaAdi() {
+    var ad = metin.value.trim().replace(/[^\p{L}\p{N}_-]+/gu, '-').replace(/^-+|-+$/g, '');
+    return 'kar-tanesi' + (ad ? '-' + ad : '');
+  }
+
+  function galeriDoldur() {
+    var galeri = el('galeri');
+    galeri.innerHTML = '';
+    for (var i = 0; i < 12; i++) {
+      (function (yazi) {
+        var d = document.createElement('button');
+        d.className = 'kucuk';
+        d.title = yazi;
+        d.innerHTML = KarTanesi.uret(yazi, { boyut: 96 }) + '<span></span>';
+        d.lastChild.textContent = yazi;
+        d.addEventListener('click', function () { sec(yazi); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+        galeri.appendChild(d);
+      })(rastgeleSozcuk());
+    }
+  }
+
+  metin.addEventListener('input', ciz);
+  renk.addEventListener('input', ciz);
+  el('rastgele').addEventListener('click', function () { sec(rastgeleSozcuk()); });
+
+  el('svg').addEventListener('click', function () {
+    var svg = KarTanesi.uret(metin.value, { renk: renk.value, boyut: 1024 });
+    indir('data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg), dosyaAdi() + '.svg');
+  });
+
+  el('png').addEventListener('click', function () {
+    var svg = KarTanesi.uret(metin.value, { renk: renk.value, boyut: 1024 });
+    var resim = new Image();
+    resim.onload = function () {
+      var tuval = document.createElement('canvas');
+      tuval.width = tuval.height = 1024;
+      tuval.getContext('2d').drawImage(resim, 0, 0, 1024, 1024);
+      indir(tuval.toDataURL('image/png'), dosyaAdi() + '.png');
+    };
+    resim.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+  });
+
+  el('paylas').addEventListener('click', function () {
+    var dugme = this;
+    navigator.clipboard.writeText(location.href).then(function () {
+      dugme.textContent = 'Kopyalandı ✓';
+      setTimeout(function () { dugme.textContent = 'Bağlantıyı kopyala'; }, 1500);
+    });
+  });
+
+  window.addEventListener('hashchange', function () {
+    var yazi = decodeURIComponent(location.hash.slice(1));
+    if (yazi !== metin.value) sec(yazi);
+  });
+
+  var baslangic = '';
+  try { baslangic = decodeURIComponent(location.hash.slice(1)); } catch (e) {}
+  sec(baslangic || rastgeleSozcuk());
+  galeriDoldur();
+</script>
+</body>
+</html>
