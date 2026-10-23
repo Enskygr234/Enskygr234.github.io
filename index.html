@@ -2,53 +2,62 @@
 <html lang="tr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self'; media-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <script src="guard.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Winterdeveloper</title>
-<meta name="description" content="Winterdeveloper'ın oyunları, Android uygulamaları, Windows araçları ve web projeleri. Hepsi ücretsiz indir veya tarayıcıda aç.">
-<meta name="theme-color" content="#070b16">
+<meta name="description" content="Kıştan, Nardugan'dan ve Türk masallarından ilham alan oyunlar, Android uygulamaları ve Windows araçları. Hepsi ücretsiz.">
+<meta name="theme-color" content="#0a1a2f">
 <meta property="og:title" content="Winterdeveloper">
-<meta property="og:description" content="Oyunlar, Android uygulamaları, Windows araçları ve web projeleri. Ücretsiz indir.">
+<meta property="og:description" content="Kış temalı oyunlar, Android uygulamaları ve Windows araçları. Hepsi ücretsiz.">
+<meta property="og:image" content="https://enskygr234.github.io/ensdewloper.github.io/img/video/sonvardiya.jpg">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Alumni+Sans:wght@500;700;800&family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<canvas id="snow"></canvas>
-<div class="aurora"></div>
-<div class="wrap">
-  <nav>
-    <a class="logo" href="./"><span class="flake">❄</span>Winterdeveloper</a>
-  </nav>
 
-  <header>
-    <div class="tag"><i></i>Hepsi ücretsiz, hemen indir</div>
-    <h1>Winter<span>developer</span></h1>
-    <p class="lead">Oyunlar, Android uygulamaları, Windows araçları ve web projeleri. İstediğini indir ya da tarayıcıda hemen aç.</p>
-    <div class="stats" id="stats"></div>
-  </header>
-
-  <div class="controls" id="projeler">
-    <div class="controls-in">
-      <label class="search">
-        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-        <input id="q" type="search" placeholder="Proje ara…" autocomplete="off">
-      </label>
-      <div class="chips" id="chips"></div>
-    </div>
+<header class="hero" id="ust">
+  <div class="aurora" aria-hidden="true"></div>
+  <canvas class="snow" id="snow" aria-hidden="true"></canvas>
+  <div class="hero-in">
+    <h1 class="title"><span>Winter</span><span>developer</span></h1>
+    <p class="lead">Kıştan, Nardugan'dan ve Türk masallarından ilham alan oyunlar, Android uygulamaları ve Windows araçları. Hepsi ücretsiz.</p>
+    <a class="btn ember big" href="#projeler">Projelere göz at</a>
   </div>
+  <canvas class="frost" id="frost" aria-hidden="true"></canvas>
+  <p class="hint" id="hint" aria-hidden="true">Buğulu camı parmağınla sil</p>
+</header>
 
-  <main class="grid" id="grid"></main>
+<main>
+  <section class="featured" aria-labelledby="one-cikan">
+    <h2 id="one-cikan">Öne çıkanlar</h2>
+    <div class="mosaic" id="mosaic"></div>
+  </section>
 
-  <footer>
-    <span>❄ Winterdeveloper · Kış gelir, kod yazılır.</span>
-    <span>Tüm hakları saklıdır © 2026</span>
-  </footer>
-</div>
+  <section class="all" id="projeler" aria-labelledby="butun">
+    <div class="all-head">
+      <h2 id="butun">Bütün projeler</h2>
+      <div class="tools">
+        <label class="search">
+          <span class="sr">Proje ara</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="q" type="search" placeholder="Ara: oyun, uygulama, araç…" autocomplete="off">
+        </label>
+        <div class="tabs" id="tabs" role="tablist" aria-label="Kategori"></div>
+      </div>
+    </div>
+    <ul class="list" id="list"></ul>
+  </section>
+</main>
+
+<footer class="foot">
+  <p>Winterdeveloper. Kış gelir, kod yazılır.</p>
+  <a href="#ust">Başa dön</a>
+</footer>
 
 <script src="projects.js"></script>
 <script src="app.js"></script>

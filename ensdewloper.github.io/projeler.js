@@ -75,7 +75,7 @@ window.PROJELER = [
     ozet: "Martı Köyü'nün feneri söndü. Ada, dedesinin fenerini alıp ormandan mağaraya, sisli limana uzanan bir yolculuğa çıkıyor. Bütün grafik ve müzikler kodla üretiliyor.",
     teknoloji: "C#, WinForms",
     etiketler: ["Windows"],
-    medya: { gorsel: "https://raw.githubusercontent.com/Enskygr234/kayip-fener/HEAD/docs/title.png", emoji: "🏮", renk: "linear-gradient(160deg, #0e2a47, #2e6b9f)" },
+    medya: { gorsel: "img/kapak/kayip-fener.png", emoji: "🏮", renk: "linear-gradient(160deg, #0e2a47, #2e6b9f)" },
     linkler: [
       { tip: "indir", ad: "Windows için indir", href: "https://github.com/Enskygr234/winter-browser-releases/releases/download/wd-kayip-fener/KayipFener.exe" }
     ]
@@ -85,7 +85,7 @@ window.PROJELER = [
     ozet: "Gün üç gündür doğmuyor. Nar, koru fenerini alıp zirveye çıkıyor; yolda Karakoncolos, Şahmeran, Tepegöz ve Ayaz Ata'yla karşılaşıyor. Onları ısıtabilir ya da yakabilirsin.",
     teknoloji: "C#, .NET 8",
     etiketler: ["Windows"],
-    medya: { gorsel: "https://raw.githubusercontent.com/Enskygr234/son-kis/HEAD/docs/baslik.png", emoji: "❄️", renk: "linear-gradient(160deg, #0e2a47, #2e6b9f)" },
+    medya: { gorsel: "img/kapak/son-kis.png", emoji: "❄️", renk: "linear-gradient(160deg, #0e2a47, #2e6b9f)" },
     linkler: [
       { tip: "indir", ad: "Windows için indir", href: "https://github.com/Enskygr234/winter-browser-releases/releases/tag/wd-son-kis" }
     ]
@@ -233,7 +233,7 @@ window.PROJELER = [
     id: "kar-tanesi", ad: "Kar Tanesi", grup: "web", tur: ["web"],
     ozet: "Adını yaz, sana özel bir kar tanesi üretsin. Her isim farklı bir desen.",
     teknoloji: "JavaScript",
-    medya: { gorsel: "https://raw.githubusercontent.com/Enskygr234/kar-tanesi/HEAD/docs/winterdeveloper.svg", sigdir: true, emoji: "✳️", renk: "linear-gradient(160deg, #0e2a47, #2e6b9f)" },
+    medya: { gorsel: "img/kapak/kar-tanesi.svg", sigdir: true, emoji: "✳️", renk: "linear-gradient(160deg, #0e2a47, #2e6b9f)" },
     linkler: [{ tip: "ac", href: PAGES + "kar-tanesi/" }]
   },
   {
@@ -256,14 +256,14 @@ window.PROJELER = [
     id: "buz-arsiv", ad: "Buz Arşiv", grup: "windows", tur: ["windows"],
     ozet: "Ctrl + Shift + F ile dosyanı anında bul, \"nereye kaydettim?\" zaman çizelgesine bak, yanlışlıkla sildiğini tek tıkla geri getir.",
     teknoloji: "C#, WPF", ara: "dosya arama",
-    medya: { gorsel: "https://raw.githubusercontent.com/Enskygr234/buz-arsiv/HEAD/docs/arama.png", sigdir: true, emoji: "🧊", renk: "linear-gradient(160deg, #0f3a66, #1a6fb3)" },
+    medya: { gorsel: "img/kapak/buz-arsiv.png", sigdir: true, emoji: "🧊", renk: "linear-gradient(160deg, #0f3a66, #1a6fb3)" },
     linkler: [{ tip: "indir", href: "https://github.com/Enskygr234/winter-browser-releases/releases/tag/wd-buz-arsiv" }]
   },
   {
     id: "ayaz-launcher", ad: "Ayaz Launcher", grup: "windows", tur: ["windows"],
     ozet: "Ctrl + Space ile açılan, 5 yuvalı, buzlu cam görünümlü hızlı başlatıcı. En sevdiğin programlar tek tuş uzağında.",
     teknoloji: "C#, WPF", ara: "başlatıcı kısayol",
-    medya: { gorsel: "https://raw.githubusercontent.com/Enskygr234/Ayaz-launcher/HEAD/docs/onizleme.png", emoji: "🚀", renk: "linear-gradient(160deg, #0f3a66, #1a6fb3)" },
+    medya: { gorsel: "img/kapak/ayaz-launcher.png", emoji: "🚀", renk: "linear-gradient(160deg, #0f3a66, #1a6fb3)" },
     linkler: [{ tip: "indir", href: "https://github.com/Enskygr234/winter-browser-releases/releases/tag/wd-ayaz-launcher" }]
   },
   {
