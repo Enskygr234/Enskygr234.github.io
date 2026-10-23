@@ -54,6 +54,7 @@ function render(){
   const list = P.filter(filters[cat]).filter(p => !t || norm(p.title + " " + p.desc + " " + (p.lang||"") + " " + platforms(p).join(" ")).includes(t));
   grid.innerHTML = list.length ? list.map(card).join("") : `<div class="empty">“${esc(q.value)}” için proje bulunamadı.</div>`;
 }
+try { const s = new URLSearchParams(location.search).get("q"); if (s) { q.value = s.slice(0, 60); cat = "all"; } } catch(e) {}
 q.addEventListener("input", render);
 drawChips(); render();
 
