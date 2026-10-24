@@ -1,0 +1,65 @@
+:root{
+  --night:#0a1a2f; --deep:#06111f; --snow:#f6fbff; --muted:#9db3c8;
+  --aurora:#5ef2c2; --dusk:#8f7cf7; --ember:#ff9a4d; --gold:#ffd27a;
+  --up:#5ef2c2; --down:#ff7a6b;
+  --line:rgba(223,234,242,.12); --panel:rgba(223,234,242,.05);
+  --display:"Alumni Sans",system-ui,sans-serif; --body:"Onest",system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--deep);color:var(--snow);font:16px/1.55 var(--body);min-height:100svh;overflow-x:hidden}
+button,input,select,output{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--aurora);outline-offset:2px;border-radius:6px}
+.sky{position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(40% 30% at 20% 0%,rgba(94,242,194,.18),transparent 70%),
+    radial-gradient(35% 28% at 85% 5%,rgba(143,124,247,.2),transparent 70%),
+    linear-gradient(180deg,var(--night),var(--deep) 60%)}
+.wrap{max-width:980px;margin:0 auto;padding:22px 16px 48px}
+.top{margin-bottom:22px}
+.back{color:var(--muted);text-decoration:none;font-size:14px}
+.back:hover{color:var(--snow)}
+h1{font:800 clamp(52px,11vw,96px)/.9 var(--display);margin-top:14px;text-shadow:0 0 30px rgba(94,242,194,.25)}
+h1 span{color:var(--gold)}
+h2{font:700 28px/1 var(--display);letter-spacing:.01em}
+.status{color:var(--muted);font-size:14px;margin-top:10px}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;backdrop-filter:blur(6px)}
+.card .ad{color:var(--muted);font-size:14px}
+.card .fiyat{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums;margin-top:2px;letter-spacing:-.01em}
+.card.altin .fiyat{color:var(--gold)}
+.card .alt{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;display:flex;gap:8px;flex-wrap:wrap}
+.card.bos .fiyat{color:var(--muted)}
+.up{color:var(--up)} .down{color:var(--down)}
+.skel{height:96px;border-radius:16px;background:linear-gradient(90deg,var(--panel),rgba(223,234,242,.09),var(--panel));background-size:200% 100%;animation:sk 1.4s linear infinite}
+@keyframes sk{to{background-position:-200% 0}}
+.panel{margin-top:16px;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px}
+.panel-head{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.panel-head h2{margin-right:auto}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px}
+.seg button{background:none;border:0;border-radius:999px;padding:6px 12px;font-size:14px;color:var(--muted);cursor:pointer}
+.seg button.on{background:var(--snow);color:var(--night);font-weight:600}
+.chart{position:relative;height:280px;margin-top:16px;touch-action:pan-y}
+.chart svg{width:100%;height:100%;overflow:visible;display:block}
+.chart .gl{stroke:var(--line);stroke-width:1}
+.chart .lbl{fill:var(--muted);font-size:11px;font-family:var(--body)}
+.chart .ln{fill:none;stroke:var(--aurora);stroke-width:2;vector-effect:non-scaling-stroke}
+.chart .cur{stroke:rgba(246,251,255,.4);stroke-width:1;vector-effect:non-scaling-stroke}
+.tip{position:absolute;top:0;transform:translateX(-50%);background:var(--snow);color:var(--night);font-size:13px;font-weight:600;
+  padding:5px 9px;border-radius:8px;white-space:nowrap;pointer-events:none;font-variant-numeric:tabular-nums}
+.tip small{display:block;font-weight:500;opacity:.65;font-size:11px}
+.note{color:var(--muted);font-size:13px;margin-top:10px}
+.conv{display:grid;gap:10px;grid-template-columns:1fr 1fr 1.2fr;margin-top:14px;align-items:center}
+.conv input,.conv select{background:rgba(6,17,31,.6);border:1px solid var(--line);border-radius:12px;padding:12px;min-width:0}
+.conv select option{color:#000}
+.conv output{font-size:26px;font-weight:700;color:var(--gold);font-variant-numeric:tabular-nums}
+.foot{color:var(--muted);font-size:12px;margin-top:20px;max-width:60em}
+@media (max-width:600px){
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .card{padding:13px}
+  .card .fiyat{font-size:20px}
+  .chart{height:220px}
+  .conv{grid-template-columns:1fr 1fr}
+  .conv output{grid-column:1/-1}
+}
+@media (prefers-reduced-motion:reduce){.skel{animation:none}}

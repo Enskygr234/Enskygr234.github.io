@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src https://finans.truncgil.com https://open.er-api.com https://api.frankfurter.app https://api.frankfurter.dev; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kur Ayazı · Döviz ve Altın</title>
+<meta name="description" content="Dolar, euro, sterlin, gram ve çeyrek altın: canlı kurlar, kur grafiği ve TL çevirici.">
+<meta name="theme-color" content="#0a1a2f">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alumni+Sans:wght@700;800&family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="sky" aria-hidden="true"></div>
+<main class="wrap">
+  <header class="top">
+    <a class="back" href="/">← Winterdeveloper</a>
+    <h1>Kur <span>Ayazı</span></h1>
+    <p class="status" id="durum">Kurlar yükleniyor…</p>
+  </header>
+
+  <section class="grid" id="kartlar" aria-live="polite"></section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <h2>Kur grafiği</h2>
+      <div class="seg" id="paraSec" role="group" aria-label="Para birimi">
+        <button class="on" data-p="USD">Dolar</button><button data-p="EUR">Euro</button><button data-p="GBP">Sterlin</button>
+      </div>
+      <div class="seg" id="gunSec" role="group" aria-label="Süre">
+        <button data-g="30">1A</button><button class="on" data-g="90">3A</button><button data-g="365">1Y</button>
+      </div>
+    </div>
+    <div class="chart" id="grafik">
+      <svg id="svg" preserveAspectRatio="none" aria-hidden="true"></svg>
+      <div class="tip" id="tip" hidden></div>
+    </div>
+    <p class="note" id="grafikNot"></p>
+  </section>
+
+  <section class="panel">
+    <h2>Çevirici</h2>
+    <div class="conv">
+      <input id="miktar" type="number" value="100" min="0" step="any" inputmode="decimal" aria-label="Miktar">
+      <select id="birim" aria-label="Birim"></select>
+      <output id="sonuc">—</output>
+    </div>
+  </section>
+
+  <p class="foot">Anlık veriler Truncgil Finans'tan, grafik Avrupa Merkez Bankası kaynaklı Frankfurter'dan gelir. Bilgi amaçlıdır; alım satım için bankanın kurunu esas alın. Sayfa her dakika yenilenir.</p>
+</main>
+<script src="app.js"></script>
+</body>
+</html>
