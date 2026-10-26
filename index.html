@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self'; media-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self'; media-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <script src="guard.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -17,6 +17,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Alumni+Sans:wght@500;700;800&family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="duyuru.css">
 </head>
 <body>
 
@@ -33,6 +34,11 @@
 </header>
 
 <main>
+  <section class="featured" id="duyuru" data-duyuru-bolum hidden aria-labelledby="duyuru-baslik">
+    <h2 id="duyuru-baslik">Duyurular</h2>
+    <div id="duyurular"></div>
+  </section>
+
   <section class="featured" aria-labelledby="one-cikan">
     <h2 id="one-cikan">Öne çıkanlar</h2>
     <div class="mosaic" id="mosaic"></div>
@@ -61,5 +67,6 @@
 
 <script src="projects.js"></script>
 <script src="app.js"></script>
+<script src="duyuru.js" data-site="winterdeveloper" defer></script>
 </body>
 </html>

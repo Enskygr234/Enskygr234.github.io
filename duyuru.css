@@ -1,0 +1,46 @@
+/* Ortak duyuru stili (duyuru.js ile birlikte). İki sitede de aynı görünür. */
+.wd-bant, .wd-popup, .wd-kart {
+  --wd-zemin: #0b1830;
+  --wd-metin: #eaf2ff;
+  --wd-soluk: #9fb2cc;
+  --wd-cizgi: rgba(160, 205, 255, .18);
+  --wd-buz: #7fd4ff;
+  --wd-fener: #ffa94d;
+  font-family: "Onest", "Segoe UI", system-ui, sans-serif;
+}
+
+/* ---------- üst bant ---------- */
+.wd-bant { position: relative; z-index: 60; display: flex; align-items: center; gap: 10px; padding: 10px 16px; color: #04121f; font-size: .92rem; line-height: 1.45; }
+.wd-bant.wd-buz { background: linear-gradient(90deg, #7fd4ff, #9fe9ff); }
+.wd-bant.wd-fener { background: linear-gradient(90deg, #ffa94d, #ffc27a); color: #2a1300; }
+.wd-bant.wd-uyari { background: linear-gradient(90deg, #ff6b6b, #ff8f7a); color: #2a0606; }
+.wd-bant-ic { flex: 1; min-width: 0; max-width: 1180px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: baseline; justify-content: center; gap: 4px 10px; text-align: center; }
+.wd-bant b { font-weight: 700; }
+.wd-bant-link { color: inherit; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.wd-kapat { flex: none; width: 30px; height: 30px; border: 0; border-radius: 50%; background: rgba(0, 0, 0, .12); color: inherit; font: 600 20px/1 system-ui, sans-serif; cursor: pointer; }
+.wd-kapat:hover { background: rgba(0, 0, 0, .22); }
+
+/* ---------- pop-up ---------- */
+.wd-perde { position: fixed; inset: 0; z-index: 300; display: grid; place-items: center; padding: 16px; background: rgba(2, 6, 16, .66); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); animation: wd-gel .25s ease-out; }
+.wd-popup { width: min(440px, 100%); max-height: calc(100svh - 32px); overflow: auto; padding: 26px 24px 20px; border-radius: 18px; background: var(--wd-zemin); color: var(--wd-metin); border: 1px solid var(--wd-cizgi); box-shadow: 0 30px 80px -20px rgba(0, 0, 0, .8); animation: wd-yuksel .3s cubic-bezier(.2, .8, .2, 1); }
+.wd-popup h2 { margin: 0 0 10px; font-size: 1.35rem; line-height: 1.2; color: var(--wd-metin); }
+.wd-popup p { margin: 0; color: var(--wd-soluk); white-space: pre-line; }
+.wd-popup-alt { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; margin-top: 20px; }
+.wd-dugme { display: inline-flex; align-items: center; padding: 10px 16px; border-radius: 999px; border: 1px solid var(--wd-cizgi); background: rgba(255, 255, 255, .06); color: var(--wd-metin); font: 600 .9rem/1 inherit; font-family: inherit; text-decoration: none; cursor: pointer; }
+.wd-dugme:hover { background: rgba(255, 255, 255, .12); }
+.wd-dugme-ana { background: var(--wd-fener); border-color: var(--wd-fener); color: #2a1300; }
+.wd-dugme-ana:hover { background: #ffbe78; }
+@keyframes wd-gel { from { opacity: 0; } }
+@keyframes wd-yuksel { from { opacity: 0; transform: translateY(14px) scale(.98); } }
+
+/* ---------- kartlar ---------- */
+.wd-kartlar { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap: 14px; }
+.wd-kart { position: relative; padding: 18px 20px; border-radius: 16px; background: rgba(160, 205, 255, .05); border: 1px solid var(--wd-cizgi); color: var(--wd-metin); }
+.wd-kart.wd-sabit { border-color: rgba(255, 169, 77, .55); background: rgba(255, 169, 77, .07); }
+.wd-kart.wd-sabit::after { content: "Sabit"; position: absolute; top: 14px; right: 16px; font-size: .72rem; font-weight: 600; letter-spacing: .04em; color: var(--wd-fener); }
+.wd-tarih { display: block; font-size: .78rem; color: var(--wd-soluk); margin-bottom: 6px; }
+.wd-kart h3 { margin: 0 0 6px; font-size: 1.08rem; line-height: 1.3; color: var(--wd-metin); }
+.wd-kart p { margin: 0; color: var(--wd-soluk); font-size: .94rem; line-height: 1.55; white-space: pre-line; }
+.wd-kart-link { display: inline-block; margin-top: 10px; color: var(--wd-buz); font-weight: 600; font-size: .9rem; text-underline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) { .wd-perde, .wd-popup { animation: none; } }

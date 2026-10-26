@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src https://api.github.com; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Duyuru Paneli</title>
+<meta name="theme-color" content="#0a1a2f">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../duyuru.css">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<!-- ---------- giriş ---------- -->
+<main class="giris" id="giris" hidden>
+  <form class="giris-kutu" id="girisForm" autocomplete="off">
+    <h1>Duyuru Paneli</h1>
+    <p class="soluk">İki sitenin duyurularını buradan yönetirsin. Giriş için GitHub erişim anahtarın (token) gerekir.</p>
+    <label class="alan">
+      <span>GitHub token</span>
+      <input id="token" type="password" required spellcheck="false" placeholder="github_pat_…">
+    </label>
+    <label class="kutucuk"><input id="hatirla" type="checkbox" checked> Bu cihazda hatırla</label>
+    <button class="dugme ana genis" type="submit" id="girisDugme">Giriş yap</button>
+    <p class="hata" id="girisHata" role="alert"></p>
+    <details class="yardim">
+      <summary>Token nasıl alınır?</summary>
+      <ol>
+        <li>GitHub → Settings → Developer settings → <b>Fine-grained tokens</b> → <b>Generate new token</b></li>
+        <li>Repository access: <b>Only select repositories</b> → <code>Enskygr234.github.io</code></li>
+        <li>Permissions → Repository → <b>Contents: Read and write</b></li>
+        <li>Oluşan <code>github_pat_…</code> anahtarını buraya yapıştır.</li>
+      </ol>
+      <p class="soluk">Token yalnızca bu tarayıcıda saklanır ve sadece api.github.com'a gönderilir.</p>
+    </details>
+  </form>
+</main>
+
+<!-- ---------- panel ---------- -->
+<div class="panel" id="panel" hidden>
+  <header class="ust">
+    <h1>Duyuru Paneli</h1>
+    <div class="ust-sag">
+      <span class="durum" id="durum" role="status"></span>
+      <button class="dugme" type="button" id="yenile">Yenile</button>
+      <button class="dugme" type="button" id="cikis">Çıkış</button>
+    </div>
+  </header>
+
+  <div class="duzen">
+    <section class="liste-bolum" aria-labelledby="liste-baslik">
+      <div class="bolum-ust">
+        <h2 id="liste-baslik">Duyurular</h2>
+        <button class="dugme ana" type="button" id="yeni">+ Yeni duyuru</button>
+      </div>
+      <div class="filtre" id="filtre" role="tablist" aria-label="Site">
+        <button type="button" data-f="hepsi" class="secili">Hepsi</button>
+        <button type="button" data-f="winterdeveloper">Winterdeveloper</button>
+        <button type="button" data-f="ensdeveloper">ENS Developer</button>
+      </div>
+      <ul class="liste" id="liste"></ul>
+      <p class="bos" id="bos" hidden>Henüz duyuru yok. “Yeni duyuru” ile ilkini ekle.</p>
+    </section>
+
+    <section class="form-bolum" aria-labelledby="form-baslik">
+      <form id="form" autocomplete="off">
+        <h2 id="form-baslik">Yeni duyuru</h2>
+
+        <fieldset class="alan">
+          <legend>Nerede görünsün?</legend>
+          <div class="secenekler">
+            <label class="cip"><input type="checkbox" name="site" value="winterdeveloper" checked> Winterdeveloper</label>
+            <label class="cip"><input type="checkbox" name="site" value="ensdeveloper" checked> ENS Developer</label>
+          </div>
+        </fieldset>
+
+        <fieldset class="alan">
+          <legend>Biçim</legend>
+          <div class="secenekler">
+            <label class="cip"><input type="radio" name="bicim" value="kart" checked> Duyuru kartı</label>
+            <label class="cip"><input type="radio" name="bicim" value="bant"> Üst bant</label>
+            <label class="cip"><input type="radio" name="bicim" value="popup"> Pop-up</label>
+          </div>
+          <p class="ipucu" id="bicimIpucu"></p>
+        </fieldset>
+
+        <fieldset class="alan" id="renkAlan" hidden>
+          <legend>Bant rengi</legend>
+          <div class="secenekler">
+            <label class="cip"><input type="radio" name="renk" value="buz" checked> Buz mavisi</label>
+            <label class="cip"><input type="radio" name="renk" value="fener"> Fener turuncusu</label>
+            <label class="cip"><input type="radio" name="renk" value="uyari"> Uyarı kırmızısı</label>
+          </div>
+        </fieldset>
+
+        <label class="alan"><span>Başlık</span><input name="baslik" maxlength="120" placeholder="Örn: Son Vardiya 1.2 çıktı"></label>
+        <label class="alan"><span>Metin</span><textarea name="metin" rows="4" maxlength="1200" placeholder="Duyurunun ayrıntısı"></textarea></label>
+
+        <div class="iki">
+          <label class="alan"><span>Bağlantı <small>(isteğe bağlı)</small></span><input name="link" placeholder="https://… ya da /Son-Tren/"></label>
+          <label class="alan"><span>Bağlantı yazısı</span><input name="linkMetni" maxlength="40" placeholder="Ayrıntılar"></label>
+        </div>
+        <div class="iki">
+          <label class="alan"><span>Başlangıç <small>(isteğe bağlı)</small></span><input name="baslangic" type="date"></label>
+          <label class="alan"><span>Bitiş <small>(isteğe bağlı)</small></span><input name="bitis" type="date"></label>
+        </div>
+
+        <div class="secenekler">
+          <label class="kutucuk"><input name="aktif" type="checkbox" checked> Yayında</label>
+          <label class="kutucuk" id="sabitAlan"><input name="sabit" type="checkbox"> En üste sabitle</label>
+        </div>
+
+        <div class="onizleme">
+          <span class="etiket">Önizleme</span>
+          <div id="onizleme"></div>
+        </div>
+
+        <p class="hata" id="formHata" role="alert"></p>
+        <div class="form-alt">
+          <button class="dugme" type="button" id="vazgec">Vazgeç</button>
+          <button class="dugme ana" type="submit" id="kaydet">Yayınla</button>
+        </div>
+      </form>
+    </section>
+  </div>
+</div>
+
+<script src="admin.js"></script>
+</body>
+</html>
