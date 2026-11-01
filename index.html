@@ -2,218 +2,35 @@
 <html lang="tr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self'; media-src 'self'; connect-src 'self' https://super-math-8092winterdeveloper-ai.ensygk115.workers.dev; manifest-src 'self'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
-<meta name="referrer" content="strict-origin-when-cross-origin">
-<script src="guard.js"></script>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Winterdeveloper · Kış temalı ücretsiz oyunlar, Android uygulamaları ve Windows araçları</title>
-<meta name="description" content="Kıştan, Nardugan'dan ve Türk masallarından ilham alan oyunlar, Android uygulamaları ve Windows araçları. Hepsi ücretsiz; indir ya da tarayıcıda hemen aç.">
-<meta name="keywords" content="ücretsiz oyun, android uygulama, apk, windows araçları, tarayıcı oyunu, kış, nardugan, türk masalları, winterdeveloper">
-<meta name="author" content="Winterdeveloper">
-<meta name="robots" content="index, follow, max-image-preview:large">
-<link rel="canonical" href="https://enskygr234.github.io/">
+<title>Bakımdayız · Winterdeveloper</title>
+<meta name="description" content="Winterdeveloper kısa bir bakımda. Birazdan yeniden açılacak.">
+<meta name="robots" content="noindex">
 <meta name="theme-color" content="#050d1a">
 <meta name="color-scheme" content="dark">
-<meta property="og:type" content="website">
-<meta property="og:locale" content="tr_TR">
-<meta property="og:site_name" content="Winterdeveloper">
-<meta property="og:url" content="https://enskygr234.github.io/">
-<meta property="og:title" content="Winterdeveloper">
-<meta property="og:description" content="Kış temalı oyunlar, Android uygulamaları ve Windows araçları. Hepsi ücretsiz.">
-<meta property="og:image" content="https://enskygr234.github.io/ensdewloper.github.io/img/video/sonvardiya.jpg">
-<meta property="og:image:alt" content="Son Vardiya oyunundan bir sahne">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Winterdeveloper">
-<meta name="twitter:description" content="Kış temalı oyunlar, Android uygulamaları ve Windows araçları. Hepsi ücretsiz.">
-<meta name="twitter:image" content="https://enskygr234.github.io/ensdewloper.github.io/img/video/sonvardiya.jpg">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="manifest" href="site.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Alumni+Sans:wght@500;700;800&family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=5">
-<link rel="stylesheet" href="duyuru.css?v=5">
-<link rel="stylesheet" href="ai.css?v=1">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "Winterdeveloper",
-  "url": "https://enskygr234.github.io/",
-  "inLanguage": "tr-TR",
-  "description": "Kış temalı ücretsiz oyunlar, Android uygulamaları ve Windows araçları.",
-  "potentialAction": {
-    "@type": "SearchAction",
-    "target": "https://enskygr234.github.io/?q={search_term_string}",
-    "query-input": "required name=search_term_string"
-  }
-}
-</script>
+<link href="https://fonts.googleapis.com/css2?family=Alumni+Sans:wght@800&family=Onest:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="bakim.css?v=1">
+<script src="guard.js"></script>
 </head>
 <body>
+<div class="aurora" aria-hidden="true"></div>
+<div class="snow" aria-hidden="true"></div>
 
-<a class="skip" href="#projeler">İçeriğe geç</a>
-
-<!-- açılış ekranı -->
-<div class="loader" id="loader" aria-hidden="true">
-  <div class="loader-in">
-    <svg class="loader-flake" viewBox="0 0 48 48"><g><path d="M24 4v40M6.7 14l34.6 20M6.7 34l34.6-20"/><path d="M18 7l6 4 6-4M18 41l6-4 6 4M7 21l5.3-2.4-.5-6M41 27l-5.3 2.4.5 6M7 27l5.3 2.4-.5 6M41 21l-5.3-2.4.5-6"/></g></svg>
-    <span class="loader-word">Winterdeveloper</span>
-    <span class="loader-bar"><i></i></span>
-  </div>
-</div>
-
-<div class="progress" id="progress" aria-hidden="true"></div>
-
-<!-- üst menü -->
-<header class="nav" id="nav">
-  <div class="nav-in">
-    <a class="brand" href="#ust" aria-label="Winterdeveloper, sayfanın başına dön">
-      <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 4v40M6.7 14l34.6 20M6.7 34l34.6-20"/><path d="M18 7l6 4 6-4M18 41l6-4 6 4M7 21l5.3-2.4-.5-6M41 27l-5.3 2.4.5 6M7 27l5.3 2.4-.5 6M41 21l-5.3-2.4.5-6"/></svg>
-      <span>Winter<b>developer</b></span>
-    </a>
-    <nav class="nav-links" id="menu" aria-label="Ana menü">
-      <a href="#vitrin" data-nav>Öne çıkanlar</a>
-      <a href="#projeler" data-nav>Projeler</a>
-      <a href="#duyuru" data-nav data-duyuru-link hidden>Duyurular</a>
-      <a href="/ensdewloper.github.io/">ENS Developer</a>
-      <a class="nav-gh" href="https://github.com/Enskygr234" target="_blank" rel="noopener noreferrer">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.39-5.25 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg>
-        <span>GitHub</span>
-      </a>
-    </nav>
-    <a class="btn ember nav-cta" href="#projeler">Projeler</a>
-    <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="menu">
-      <span class="sr">Menüyü aç</span><i></i><i></i>
-    </button>
-  </div>
-</header>
-
-<header class="hero" id="ust">
-  <div class="aurora" aria-hidden="true"></div>
-  <div class="grain" aria-hidden="true"></div>
-  <canvas class="snow" id="snow" aria-hidden="true"></canvas>
-  <div class="hero-in">
-    <p class="eyebrow"><span class="dot" aria-hidden="true"></span><span><span id="eyebrow-count">Ücretsiz projeler</span> · Android · Windows · Web</span></p>
-    <h1 class="title"><span>Winter</span><span>developer</span></h1>
-    <p class="lead">Kıştan, Nardugan'dan ve Türk masallarından ilham alan oyunlar, Android uygulamaları ve Windows araçları. Hepsi ücretsiz.</p>
-    <div class="hero-cta">
-      <a class="btn ember big" href="#projeler">
-        Projelere göz at
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14m0 0-6-6m6 6 6-6"/></svg>
-      </a>
-      <a class="btn glass big" href="#vitrin">Öne çıkanlar</a>
-    </div>
-  </div>
-  <canvas class="frost" id="frost" aria-hidden="true"></canvas>
-  <p class="hint" id="hint" aria-hidden="true">
-    <svg viewBox="0 0 24 24"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V10m0-1.5a1.5 1.5 0 0 1 3 0V11m0-1a1.5 1.5 0 0 1 3 0v4.5a6 6 0 0 1-6 6h-.6a6 6 0 0 1-4.9-2.6L4.2 14a1.5 1.5 0 0 1 2.4-1.8L9 15"/></svg>
-    Buğulu camı parmağınla sil
-  </p>
-  <a class="scroll-cue" href="#vitrin" aria-label="Aşağı kaydır"><span></span></a>
-</header>
-
-<main id="icerik">
-  <section class="stats" aria-label="Rakamlarla Winterdeveloper">
-    <ul class="stats-in" id="stats">
-      <li class="stat rv"><b data-count="0" data-k="all">–</b><span>ücretsiz proje</span></li>
-      <li class="stat rv"><b data-count="0" data-k="game">–</b><span>oyun</span></li>
-      <li class="stat rv"><b data-count="0" data-k="app">–</b><span>Android uygulaması</span></li>
-      <li class="stat rv"><b data-count="0" data-k="tool">–</b><span>Windows aracı</span></li>
-    </ul>
-  </section>
-
-  <section class="section" id="duyuru" data-duyuru-bolum hidden aria-labelledby="duyuru-baslik">
-    <div class="sec-head rv">
-      <p class="kicker">Haberler</p>
-      <h2 id="duyuru-baslik">Duyurular</h2>
-    </div>
-    <div id="duyurular" class="rv"></div>
-  </section>
-
-  <section class="section" id="vitrin" aria-labelledby="one-cikan">
-    <div class="sec-head rv">
-      <p class="kicker">Vitrin</p>
-      <h2 id="one-cikan">Öne çıkanlar</h2>
-      <p class="sec-sub">En çok emek verilen oyunlar ve uygulamalar. Üstüne gel, önizlemesi oynasın.</p>
-    </div>
-    <div class="mosaic" id="mosaic"></div>
-    <p class="swipe-hint" aria-hidden="true">Kaydırarak gez <svg viewBox="0 0 24 24"><path d="M5 12h14m0 0-5-5m5 5-5 5"/></svg></p>
-  </section>
-
-  <section class="section all" id="projeler" aria-labelledby="butun">
-    <div class="sec-head rv">
-      <p class="kicker">Katalog</p>
-      <h2 id="butun">Bütün projeler</h2>
-      <p class="sec-sub">Ara, kategoriye göre süz; indir ya da tarayıcıda hemen aç.</p>
-    </div>
-    <div class="toolbar" id="toolbar">
-      <div class="tools">
-        <label class="search">
-          <span class="sr">Proje ara</span>
-          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-          <input id="q" type="search" placeholder="Ara: oyun, uygulama, araç…" autocomplete="off" enterkeyhint="search">
-          <kbd class="kbd" aria-hidden="true">/</kbd>
-        </label>
-        <div class="tabs" id="tabs" role="group" aria-label="Kategori"><span class="tab-ink" aria-hidden="true"></span></div>
-      </div>
-      <p class="result-count" id="count" aria-live="polite"></p>
-    </div>
-    <ul class="grid" id="list"></ul>
-  </section>
-
-  <section class="section outro rv" aria-labelledby="outro-baslik">
-    <div class="outro-card">
-      <div class="aurora small" aria-hidden="true"></div>
-      <p class="kicker">Kaynak kod</p>
-      <h2 id="outro-baslik">Kış gelir, kod yazılır.</h2>
-      <p>Projelerin çoğu açık kaynak. Yeni sürümleri ve kodları GitHub'da takip edebilirsin.</p>
-      <div class="hero-cta">
-        <a class="btn ember" href="https://github.com/Enskygr234" target="_blank" rel="noopener noreferrer">GitHub profili</a>
-        <a class="btn glass" href="/ensdewloper.github.io/">ENS Developer sitesi</a>
-      </div>
-    </div>
-  </section>
+<main class="card">
+  <svg class="flake" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 4v40M6.7 14l34.6 20M6.7 34l34.6-20"/><path d="M18 7l6 4 6-4M18 41l6-4 6 4M7 21l5.3-2.4-.5-6M41 27l-5.3 2.4.5 6M7 27l5.3 2.4-.5 6M41 21l-5.3-2.4.5-6"/></svg>
+  <span class="kicker"><i></i>Bakım çalışması</span>
+  <h1>Kısa bir <span>kış uykusu</span></h1>
+  <p>Winterdeveloper'ı daha iyi hale getiriyoruz. Site birazdan yeniden açılacak, anlayışın için teşekkürler.</p>
+  <div class="bar" aria-hidden="true"><b></b></div>
+  <a class="btn" href="https://github.com/Enskygr234" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.39-5.25 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg>
+    GitHub'da takip et
+  </a>
+  <p class="foot">❄️ Kış gelir, kod yazılır.</p>
 </main>
-
-<footer class="foot">
-  <div class="foot-in">
-    <div class="foot-brand">
-      <a class="brand" href="#ust">
-        <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 4v40M6.7 14l34.6 20M6.7 34l34.6-20"/><path d="M18 7l6 4 6-4M18 41l6-4 6 4M7 21l5.3-2.4-.5-6M41 27l-5.3 2.4.5 6M7 27l5.3 2.4-.5 6M41 21l-5.3-2.4.5-6"/></svg>
-        <span>Winter<b>developer</b></span>
-      </a>
-      <p>Kıştan ilham alan ücretsiz oyunlar, uygulamalar ve araçlar.</p>
-    </div>
-    <nav class="foot-nav" aria-label="Alt menü">
-      <h3>Keşfet</h3>
-      <a href="#vitrin">Öne çıkanlar</a>
-      <a href="#projeler">Bütün projeler</a>
-      <a href="/ensdewloper.github.io/">ENS Developer</a>
-      <a href="/ensdewloper.github.io/oyunlar.html">Oyun salonu</a>
-    </nav>
-    <nav class="foot-nav" aria-label="Bağlantılar">
-      <h3>Bağlantılar</h3>
-      <a href="https://github.com/Enskygr234" target="_blank" rel="noopener noreferrer">GitHub</a>
-      <a href="https://github.com/Enskygr234/winter-browser-releases/releases" target="_blank" rel="noopener noreferrer">Sürümler</a>
-      <a href="/ensdewloper.github.io/hakk%C4%B1mda.html">Hakkımda</a>
-    </nav>
-  </div>
-  <div class="foot-bottom">
-    <p>© <span id="yil">2026</span> Winterdeveloper. Kış gelir, kod yazılır.</p>
-    <a href="#ust">Başa dön ↑</a>
-  </div>
-</footer>
-
-<a class="to-top" id="toTop" href="#ust" aria-label="Sayfanın başına dön" tabindex="-1">
-  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5m0 0-6 6m6-6 6 6"/></svg>
-</a>
-
-<noscript><p class="noscript">Proje listesi için JavaScript gerekir. Projelerin tamamı <a href="https://github.com/Enskygr234">GitHub</a> üzerinde.</p></noscript>
-
-<script src="projects.js"></script>
-<script src="app.js?v=5"></script>
-<script src="duyuru.js" data-site="winterdeveloper" defer></script>
-<script src="ai.js?v=2" defer></script>
 </body>
 </html>
