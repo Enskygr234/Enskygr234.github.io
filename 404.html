@@ -2,24 +2,60 @@
 <html lang="tr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Sayfa bulunamadı · Winterdeveloper</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#050d1a">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alumni+Sans:wght@700;800&family=Onest:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root{color-scheme:dark}
-  body{margin:0;min-height:100vh;display:grid;place-items:center;background:#070b16;color:#e8eefc;font:16px/1.6 system-ui,sans-serif;text-align:center;padding:24px}
-  .k{font-size:64px;line-height:1}
-  h1{font-size:28px;margin:16px 0 6px}
-  p{color:#8fa0c4;margin:0 0 24px}
-  a{display:inline-block;padding:12px 20px;border-radius:12px;background:linear-gradient(135deg,#38bdf8,#818cf8);color:#06101f;font-weight:600;text-decoration:none}
+  :root{color-scheme:dark;--deep:#050d1a;--snow:#f6fbff;--muted:#a3b8cc;--aurora:#5ef2c2;--dusk:#8f7cf7;--ember:#ff9a4d;--line:rgba(223,234,242,.18);--ease:cubic-bezier(.16,1,.3,1)}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{min-height:100svh;display:grid;place-items:center;overflow:hidden;background:radial-gradient(120% 80% at 50% 0%,#0d2444,var(--deep) 65%);color:var(--snow);font:16px/1.6 "Onest",system-ui,sans-serif;text-align:center;padding:24px;-webkit-font-smoothing:antialiased}
+  .aurora{position:fixed;inset:-20% -20% 40%;z-index:0;filter:blur(50px);opacity:.6;pointer-events:none;
+    background:radial-gradient(36% 30% at 30% 40%,rgba(94,242,194,.5),transparent 70%),radial-gradient(30% 26% at 66% 34%,rgba(143,124,247,.45),transparent 70%);animation:sway 16s ease-in-out infinite alternate}
+  @keyframes sway{to{transform:translate3d(6%,4%,0) skewX(-6deg)}}
+  .flakes{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:radial-gradient(2px 2px at 20% 30%,#fff8,transparent),radial-gradient(1.5px 1.5px at 70% 20%,#fff9,transparent),radial-gradient(2px 2px at 40% 70%,#fff6,transparent),radial-gradient(1.5px 1.5px at 85% 60%,#fff8,transparent),radial-gradient(2px 2px at 10% 85%,#fff7,transparent),radial-gradient(1.5px 1.5px at 55% 45%,#fff6,transparent);background-size:340px 340px;animation:fall 14s linear infinite}
+  @keyframes fall{to{background-position:40px 340px}}
+  main{position:relative;z-index:1;max-width:520px;animation:up .9s var(--ease) both}
+  @keyframes up{from{opacity:0;transform:translateY(24px)}}
+  svg.k{width:64px;height:64px;margin:0 auto 10px;fill:none;stroke:var(--aurora);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 14px rgba(94,242,194,.55));animation:spin 12s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .code{font:800 clamp(110px,30vw,190px)/.85 "Alumni Sans",system-ui,sans-serif;background:linear-gradient(180deg,var(--snow),#9fd9c9);-webkit-background-clip:text;background-clip:text;color:transparent}
+  h1{font:700 clamp(30px,6vw,42px)/1 "Alumni Sans",system-ui,sans-serif;letter-spacing:.01em;margin:14px 0 10px}
+  p{color:var(--muted);margin:0 auto 28px;max-width:40ch}
+  form{display:flex;gap:8px;margin:0 auto 18px;max-width:420px;padding:6px;border-radius:999px;background:rgba(223,234,242,.07);border:1px solid var(--line)}
+  form:focus-within{border-color:var(--aurora);box-shadow:0 0 0 4px rgba(94,242,194,.12)}
+  input{flex:1;min-width:0;background:none;border:0;outline:0;color:var(--snow);font:inherit;padding:8px 12px}
+  input::placeholder{color:#8aa1b7}
+  .acts{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:11px 20px;border-radius:999px;font:600 15px/1 "Onest",system-ui,sans-serif;text-decoration:none;color:var(--snow);background:rgba(223,234,242,.07);border:1px solid var(--line);cursor:pointer;transition:transform .3s var(--ease),background .2s,box-shadow .3s}
+  .btn:hover{transform:translateY(-2px);background:rgba(223,234,242,.12)}
+  .btn.ember{background:linear-gradient(180deg,#ffb878,var(--ember));border-color:transparent;color:#2a1300;box-shadow:0 10px 28px -10px rgba(255,154,77,.8)}
+  :focus-visible{outline:2px solid var(--aurora);outline-offset:3px;border-radius:999px}
+  @media (max-width:480px){.acts{flex-direction:column}.acts .btn{width:100%}}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
+  <div class="aurora" aria-hidden="true"></div>
+  <div class="flakes" aria-hidden="true"></div>
   <main>
-    <div class="k">❄</div>
+    <svg class="k" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 4v40M6.7 14l34.6 20M6.7 34l34.6-20"/><path d="M18 7l6 4 6-4M18 41l6-4 6 4M7 21l5.3-2.4-.5-6M41 27l-5.3 2.4.5 6M7 27l5.3 2.4-.5 6M41 21l-5.3-2.4.5-6"/></svg>
+    <div class="code" aria-hidden="true">404</div>
     <h1>Bu sayfa karın altında kalmış</h1>
-    <p>Aradığın sayfa taşınmış ya da hiç var olmamış olabilir.</p>
-    <a href="/">Winterdeveloper'a dön</a>
+    <p>Aradığın sayfa taşınmış ya da hiç var olmamış olabilir. Projeler arasında arayabilir ya da ana sayfaya dönebilirsin.</p>
+    <form action="/" method="get" role="search">
+      <label for="q" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Proje ara</label>
+      <input id="q" name="q" type="search" placeholder="Proje ara…" autocomplete="off">
+      <button class="btn ember" type="submit">Ara</button>
+    </form>
+    <div class="acts">
+      <a class="btn" href="/">Winterdeveloper'a dön</a>
+      <a class="btn" href="/#projeler">Bütün projeler</a>
+    </div>
   </main>
 </body>
 </html>

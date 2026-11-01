@@ -1,0 +1,11 @@
+{
+  "name": "Winterdeveloper",
+  "short_name": "Winterdev",
+  "description": "Kış temalı ücretsiz oyunlar, Android uygulamaları ve Windows araçları.",
+  "lang": "tr",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050d1a",
+  "theme_color": "#050d1a",
+  "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

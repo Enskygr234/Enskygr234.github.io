@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="tr">
+<html lang="tr" data-wd="xox">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>XOX Oyunu</title>
+<title>XOX Oyunu · Winterdeveloper</title>
 <style>
   :root { --bg:#1a1b2e; --cell:#26284a; --text:#f0f0ff; --x:#ff6b8b; --o:#5ce1e6; --muted:#9a9cc4; }
   * { box-sizing:border-box; }
@@ -21,8 +21,16 @@
   .score { display:flex; gap:24px; margin:16px 0; color:var(--muted); }
   .score b { color:var(--text); }
 </style>
+<meta name="description" content="Bilgisayara karşı ya da iki kişilik oynanan klasik XOX oyunu.">
+<meta name="theme-color" content="#050d1a">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/wd-kit.css">
 </head>
 <body>
+<a class="wd-geri" href="/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5m0 0 6-6m-6 6 6 6"/></svg><span>Winter<b>developer</b></span></a>
   <h1>XOX</h1>
   <div class="opts">
     <button data-mode="ai" class="active">🤖 Bilgisayara karşı</button>

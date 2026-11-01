@@ -1,0 +1,108 @@
+/* =========================================================
+   Winterdeveloper küçük araç kiti
+   Basit web araçlarına (şifre üretici, pomodoro, görev listesi,
+   harcama takip, XOX) ana sitenin görsel dilini giydirir.
+   Sayfanın kendi <style> bloğundan SONRA yüklenir; yalnızca
+   renk değişkenlerini ve görünümü değiştirir, işleve dokunmaz.
+   ========================================================= */
+:root{
+  --bg:#050d1a; --card:#0c1b31; --text:#f2f7fc; --muted:#a3b8cc; --line:rgba(223,234,242,.14);
+  --accent:#ff9a4d; --wd-aurora:#5ef2c2; --wd-dusk:#8f7cf7; --wd-ease:cubic-bezier(.2,.8,.2,1);
+  color-scheme:dark;
+}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:"Onest",system-ui,-apple-system,"Segoe UI",sans-serif!important;-webkit-font-smoothing:antialiased;
+  background:radial-gradient(900px 520px at 80% -10%,rgba(143,124,247,.16),transparent 60%),radial-gradient(800px 480px at 0% 0%,rgba(94,242,194,.1),transparent 60%),var(--bg)!important;
+  background-attachment:fixed!important;padding-top:84px!important;min-height:100svh
+}
+::selection{background:#ff9a4d;color:#2a1300}
+:focus-visible{outline:2px solid var(--wd-aurora);outline-offset:3px}
+h1{letter-spacing:-.02em}
+
+/* ana siteye dönüş */
+.wd-geri{position:fixed;z-index:50;top:max(14px,env(safe-area-inset-top));left:max(14px,env(safe-area-inset-left));display:inline-flex;align-items:center;gap:8px;
+  padding:9px 15px 9px 12px;border-radius:999px;font:600 14px/1 "Onest",system-ui,sans-serif;color:var(--text);text-decoration:none;
+  background:rgba(10,26,47,.72);border:1px solid rgba(223,234,242,.18);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  transition:border-color .2s,transform .3s var(--wd-ease)}
+.wd-geri:hover{border-color:var(--wd-aurora);transform:translateX(-2px)}
+.wd-geri b{color:var(--wd-aurora);font-weight:600}
+.wd-geri svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+
+/* kart */
+main{position:relative;border:1px solid var(--line);border-radius:24px!important;
+  background:linear-gradient(180deg,rgba(18,38,66,.78),rgba(10,24,44,.78))!important;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  box-shadow:0 40px 80px -40px rgba(0,0,0,.9)!important;animation:wd-in .7s var(--wd-ease) both}
+@keyframes wd-in{from{opacity:0;transform:translateY(18px)}}
+
+/* düğmeler ve alanlar */
+button{font-family:inherit!important;transition:background .2s,border-color .2s,color .2s,transform .25s var(--wd-ease),box-shadow .3s}
+button:not(:disabled):hover{transform:translateY(-1px)}
+button:not(:disabled):active{transform:scale(.97)}
+input,select,textarea{font-family:inherit;transition:border-color .2s,box-shadow .2s}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--wd-aurora)!important;box-shadow:0 0 0 4px rgba(94,242,194,.12)}
+select option{color:#000}
+.wd-ana{background:linear-gradient(180deg,#ffb878,#ff9a4d)!important;color:#2a1300!important;font-weight:700;box-shadow:0 8px 22px -10px rgba(255,154,77,.8)}
+
+/* ---------- şifre üretici ---------- */
+[data-wd="sifre"] #pw{background:rgba(0,0,0,.3);letter-spacing:.04em}
+[data-wd="sifre"] #copy{background:rgba(223,234,242,.08);border:1px solid var(--line)}
+[data-wd="sifre"] #copy:hover{background:rgba(223,234,242,.14)}
+[data-wd="sifre"] #gen{border-radius:999px;padding:15px}
+[data-wd="sifre"] label{padding:10px 12px;margin:8px 0;border-radius:12px;border:1px solid transparent;transition:background .2s,border-color .2s}
+[data-wd="sifre"] label:hover{background:rgba(223,234,242,.04);border-color:var(--line)}
+[data-wd="sifre"] input[type=range],[data-wd="sifre"] input[type=checkbox]{accent-color:var(--wd-aurora)}
+
+/* ---------- pomodoro: çalışma = fener, mola = kuzey ışığı ---------- */
+[data-wd="pomodoro"] body{--accent:#ff8a5c}
+[data-wd="pomodoro"] body.break{--bg:#050d1a;--text:#f2f7fc;--muted:#a3b8cc;--accent:#5ef2c2}
+[data-wd="pomodoro"] .modes button{border-color:var(--line)!important}
+[data-wd="pomodoro"] .modes button:hover{color:var(--text)}
+[data-wd="pomodoro"] .modes button.active,[data-wd="pomodoro"] #start{color:#1d0d02!important;font-weight:700}
+[data-wd="pomodoro"] body.break .modes button.active,[data-wd="pomodoro"] body.break #start{color:#03221a!important}
+[data-wd="pomodoro"] #start{border-radius:999px;box-shadow:0 10px 28px -10px var(--accent)}
+[data-wd="pomodoro"] #reset{background:rgba(223,234,242,.08)!important;color:var(--text)!important;border:1px solid var(--line);border-radius:999px}
+[data-wd="pomodoro"] svg circle:first-child{stroke:rgba(223,234,242,.08)}
+[data-wd="pomodoro"] #ring{filter:drop-shadow(0 0 10px var(--accent));transition:stroke .4s}
+[data-wd="pomodoro"] .time{font-family:"Onest",system-ui,sans-serif}
+
+/* ---------- görev listesi ---------- */
+[data-wd="gorev"] body{--accent:#ff9a4d}
+[data-wd="gorev"] form button{background:linear-gradient(180deg,#ffb878,#ff9a4d);color:#2a1300;font-weight:700;border-radius:10px}
+[data-wd="gorev"] .filters button{border-radius:999px}
+[data-wd="gorev"] .filters button.active{color:var(--wd-aurora);border-color:var(--wd-aurora)}
+[data-wd="gorev"] li{border-radius:10px;transition:background .2s}
+[data-wd="gorev"] li:hover{background:rgba(223,234,242,.04)}
+[data-wd="gorev"] input[type=text]{min-width:0}
+[data-wd="gorev"] main{align-self:flex-start}
+[data-wd="gorev"] input[type=checkbox]{accent-color:var(--wd-aurora)}
+[data-wd="gorev"] li .del,[data-wd="gorev"] footer button{background:transparent;color:var(--muted)}
+[data-wd="gorev"] li .del:hover{color:#ff7676}
+[data-wd="gorev"] footer button:hover{color:var(--text)}
+
+/* ---------- harcama takip ---------- */
+[data-wd="harcama"] main{padding:24px}
+[data-wd="harcama"] body{--green:#5ef2c2;--red:#ff7676}
+[data-wd="harcama"] .card,[data-wd="harcama"] form,[data-wd="harcama"] .panel{background:rgba(223,234,242,.04)!important;border:1px solid var(--line);border-radius:16px}
+[data-wd="harcama"] form button{background:linear-gradient(180deg,#ffb878,#ff9a4d);color:#2a1300;font-weight:700}
+[data-wd="harcama"] td .x{background:transparent;color:var(--muted)}
+[data-wd="harcama"] td .x:hover{color:#ff7676}
+[data-wd="harcama"] .bar .track{background:rgba(223,234,242,.08)}
+[data-wd="harcama"] .bar .fill{background:linear-gradient(90deg,#ff9a4d,#ff7676)}
+
+/* ---------- XOX ---------- */
+[data-wd="xox"] body{--cell:rgba(223,234,242,.06);--o:#5ef2c2;--x:#ff9a4d}
+[data-wd="xox"] h1{font-size:2.6rem;letter-spacing:.2em}
+[data-wd="xox"] .board{padding:10px;border-radius:22px;background:rgba(10,26,47,.6);border:1px solid var(--line);box-shadow:0 30px 60px -30px rgba(0,0,0,.9)}
+[data-wd="xox"] .cell{border:1px solid var(--line);border-radius:14px}
+[data-wd="xox"] .cell.win{background:rgba(94,242,194,.16);border-color:var(--wd-aurora)}
+[data-wd="xox"] .opts button,[data-wd="xox"] #restart{border-radius:999px;border-color:var(--line);background:rgba(223,234,242,.06)}
+[data-wd="xox"] .opts button.active{color:var(--text);border-color:var(--wd-aurora);background:rgba(94,242,194,.1)}
+[data-wd="xox"] #restart{padding:11px 22px;color:#2a1300;font-weight:700;background:linear-gradient(180deg,#ffb878,#ff9a4d);border:0}
+
+@media (max-width:560px){
+  body{padding-top:76px!important}
+  .wd-geri{font-size:13px}
+  input,select,textarea{font-size:16px!important} /* iOS'ta yakınlaşmayı önler */
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}

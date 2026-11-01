@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="tr">
+<html lang="tr" data-wd="gorev">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Görev Listesi</title>
+<title>Görev Listesi · Winterdeveloper</title>
 <style>
   :root { --bg:#f4f5f7; --card:#fff; --text:#1d1f23; --muted:#6b7280; --accent:#4f46e5; --line:#e5e7eb; }
   @media (prefers-color-scheme: dark) { :root { --bg:#111318; --card:#1b1e25; --text:#e8e9ec; --muted:#9aa0aa; --accent:#818cf8; --line:#2b2f38; } }
@@ -26,8 +26,16 @@
   footer { display:flex; justify-content:space-between; margin-top:12px; color:var(--muted); font-size:.9rem; }
   footer button { background:transparent; color:var(--muted); padding:0; font-size:.9rem; }
 </style>
+<meta name="description" content="Tarayıcında saklanan sade ve hızlı görev listesi.">
+<meta name="theme-color" content="#050d1a">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/wd-kit.css">
 </head>
 <body>
+<a class="wd-geri" href="/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5m0 0 6-6m-6 6 6 6"/></svg><span>Winter<b>developer</b></span></a>
 <main>
   <h1>📝 Görev Listesi</h1>
   <form id="form">

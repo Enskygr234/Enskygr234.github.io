@@ -5,6 +5,9 @@ const P = (Array.isArray(window.P) ? window.P : []).filter(p => p && Array.isArr
 const REDUCE = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const HOVER = matchMedia("(hover: hover)").matches;
 const MEDIA = "/ensdewloper.github.io/img/video/";
+const root = document.documentElement;
+
+if (!REDUCE) root.classList.add("anim", "rv-on");
 
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const safeUrl = u => { try { const x = new URL(u, location.href); return (x.protocol === "https:" || x.origin === location.origin) ? x.href : "#"; } catch (e) { return "#"; } };
@@ -12,6 +15,7 @@ const has = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
 const byId = id => P.find(p => p.id === id);
 const size = mb => mb < 0.1 ? "<0,1 MB" : mb.toLocaleString("tr-TR", { maximumFractionDigits: 1 }) + " MB";
 const platforms = p => { const s = new Set(p.dl.map(d => d.kind)); if (p.web) s.add("Tarayıcı"); return [...s]; };
+const CAT = { game: "Oyun", app: "Uygulama", tool: "Windows aracı", web: "Web" };
 
 const ICON = {
   dl: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg>',
@@ -23,9 +27,28 @@ function actions(p, max) {
     const label = d.name ? d.name : (d.kind === "Minecraft" ? "Modu indir" : d.kind + " için indir");
     return `<a class="btn ember" href="${esc(safeUrl(d.url))}" rel="noopener noreferrer" download>${ICON.dl}${esc(label)} <small>${size(d.mb)}</small></a>`;
   }).join("");
-  const web = p.web ? `<a class="btn" href="${esc(safeUrl(p.web))}" target="_blank" rel="noopener noreferrer">${ICON.web}${p.cat === "game" ? "Tarayıcıda oyna" : "Tarayıcıda aç"}</a>` : "";
+  const web = p.web ? `<a class="btn" href="${esc(safeUrl(p.web))}" target="_blank" rel="noopener noreferrer">${ICON.web}${p.cat === "game" ? "Tarayıcıda oyna" : "Tarayıcıda aç"}<span class="sr"> (yeni sekmede açılır)</span></a>` : "";
   return dls + web;
 }
+
+/* ---------- sayılar ---------- */
+const COUNT = { all: P.length, game: 0, app: 0, tool: 0, web: 0 };
+P.forEach(p => { if (has(COUNT, p.cat)) COUNT[p.cat]++; });
+document.getElementById("eyebrow-count").textContent = `${P.length} ücretsiz proje`;
+const yil = document.getElementById("yil"); if (yil) yil.textContent = new Date().getFullYear();
+
+function countUp(el) {
+  const to = COUNT[el.dataset.k] || 0;
+  if (REDUCE) { el.textContent = to; return; }
+  const t0 = performance.now(), dur = 1200;
+  (function step(t) {
+    const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 4);
+    el.textContent = Math.round(to * e);
+    if (k < 1) requestAnimationFrame(step);
+  })(t0);
+}
+const statEls = [...document.querySelectorAll("[data-count]")];
+statEls.forEach(el => { el.textContent = REDUCE ? (COUNT[el.dataset.k] || 0) : "0"; });
 
 /* ---------- öne çıkanlar ---------- */
 const FEATURED = [
@@ -36,20 +59,27 @@ const FEATURED = [
   { id: "son-kis", img: "/ensdewloper.github.io/img/kapak/son-kis.png" }
 ];
 const mosaic = document.getElementById("mosaic");
+if (!HOVER) { const sub = document.querySelector("#vitrin .sec-sub"); if (sub) sub.textContent = "En çok emek verilen oyunlar ve uygulamalar. Ekranda duran kartın önizlemesi kendiliğinden oynar."; }
+let n = 0;
 mosaic.innerHTML = FEATURED.map(f => {
   const p = byId(f.id); if (!p) return "";
   const poster = f.video ? MEDIA + f.video + ".jpg" : f.img;
-  return `<article class="tile ${f.cls || ""}" data-video="${f.video ? esc(MEDIA + f.video + ".mp4") : ""}">
-    <div class="media"><img src="${esc(poster)}" alt="" loading="lazy"></div>
+  const num = String(++n).padStart(2, "0");
+  return `<article class="tile rv ${f.cls || ""}" data-video="${f.video ? esc(MEDIA + f.video + ".mp4") : ""}" aria-labelledby="t-${esc(p.id)}">
+    <div class="media"><img src="${esc(poster)}" alt="${esc(p.title)} ekran görüntüsü" loading="lazy" decoding="async"></div>
+    <div class="tile-top">
+      <span class="tile-num" aria-hidden="true">${num}</span>
+      <div class="chips">${f.video ? '<span class="chip live" aria-hidden="true">Önizleme</span>' : ""}<span class="chip">${esc(CAT[p.cat] || "")}</span></div>
+    </div>
     <div class="tile-body">
-      <h3>${esc(p.title)}</h3>
+      <h3 id="t-${esc(p.id)}">${esc(p.title)}</h3>
       <p>${esc(p.desc)}</p>
       <div class="acts">${actions(p, 1)}</div>
     </div>
   </article>`;
 }).join("");
 
-/* önizleme videoları: masaüstünde üstüne gelince, telefonda ekranın ortasındaki oynar */
+/* önizleme videoları: masaüstünde üstüne gelince, telefonda ekranda en çok görünen oynar */
 function videoOf(tile) {
   let v = tile.querySelector("video");
   if (!v && tile.dataset.video) {
@@ -79,6 +109,21 @@ if (!REDUCE) {
   }
 }
 
+/* imleci izleyen hafif ışık (kartlar ve vitrin) */
+if (HOVER && !REDUCE) {
+  let raf = 0, ev = null;
+  document.addEventListener("pointermove", e => {
+    ev = e; if (raf) return;
+    raf = requestAnimationFrame(() => {
+      raf = 0;
+      const el = ev.target.closest && ev.target.closest(".card, .tile"); if (!el) return;
+      const r = el.getBoundingClientRect();
+      el.style.setProperty("--mx", (ev.clientX - r.left) + "px");
+      el.style.setProperty("--my", (ev.clientY - r.top) + "px");
+    });
+  }, { passive: true });
+}
+
 /* ---------- bütün projeler ---------- */
 P.sort((a, b) => (a.id === "ensdewloper.github.io") - (b.id === "ensdewloper.github.io") || (b.dl.length > 0) - (a.dl.length > 0) || new Date(b.updated) - new Date(a.updated));
 const TABS = [["all", "Hepsi"], ["game", "Oyunlar"], ["app", "Uygulamalar"], ["tool", "Windows araçları"], ["web", "Web"]];
@@ -86,36 +131,144 @@ const filters = { all: () => true, game: p => p.cat === "game", app: p => p.cat 
 let cat = "all";
 try { const s = localStorage.getItem("wd-cat"); if (s && has(filters, s)) cat = s; } catch (e) {}
 
-const tabs = document.getElementById("tabs"), list = document.getElementById("list"), q = document.getElementById("q");
-function drawTabs() {
-  tabs.innerHTML = TABS.map(([k, t]) => `<button class="tab" role="tab" aria-selected="${k === cat}" data-k="${k}">${t}<span>${P.filter(filters[k]).length}</span></button>`).join("");
+const tabs = document.getElementById("tabs"), list = document.getElementById("list"), q = document.getElementById("q"), countEl = document.getElementById("count");
+const ink = tabs.querySelector(".tab-ink");
+tabs.insertAdjacentHTML("beforeend", TABS.map(([k, t]) => `<button class="tab" type="button" aria-pressed="false" data-k="${k}">${t}<span>${P.filter(filters[k]).length}</span></button>`).join(""));
+const tabBtns = [...tabs.querySelectorAll(".tab")];
+
+function moveInk(instant) {
+  const b = tabBtns.find(x => x.dataset.k === cat); if (!b || !ink) return;
+  if (instant) ink.style.transition = "none";
+  ink.style.width = b.offsetWidth + "px";
+  ink.style.transform = `translateX(${b.offsetLeft}px)`;
+  if (instant) { void ink.offsetWidth; ink.style.transition = ""; }
+}
+function drawTabs(instant) {
+  tabBtns.forEach(b => b.setAttribute("aria-pressed", String(b.dataset.k === cat)));
+  moveInk(instant);
+  const b = tabBtns.find(x => x.dataset.k === cat);
+  if (b && b.scrollIntoView && tabs.scrollWidth > tabs.clientWidth) {
+    tabs.scrollTo({ left: b.offsetLeft - tabs.clientWidth / 2 + b.offsetWidth / 2, behavior: REDUCE ? "auto" : "smooth" });
+  }
 }
 tabs.addEventListener("click", e => {
   const b = e.target.closest(".tab"); if (!b || !has(filters, b.dataset.k)) return;
   cat = b.dataset.k; try { localStorage.setItem("wd-cat", cat); } catch (e) {}
   drawTabs(); render();
 });
+
 const norm = s => s.toLocaleLowerCase("tr-TR");
-function row(p) {
-  return `<li class="row">
-    <div class="ic" aria-hidden="true">${esc(p.icon)}</div>
-    <div>
-      <h3>${esc(p.title)}</h3>
-      <p>${esc(p.desc)}</p>
-      <div class="tags">${platforms(p).map(k => `<span class="tag ${esc(k)}">${esc(k)}</span>`).join("")}</div>
+function card(p) {
+  return `<li class="card" data-cat="${esc(p.cat)}">
+    <div class="card-top">
+      <div class="ic" aria-hidden="true">${esc(p.icon)}</div>
+      <span class="cat ${esc(p.cat)}">${esc(CAT[p.cat] || "")}</span>
     </div>
+    <h3>${esc(p.title)}</h3>
+    <p>${esc(p.desc)}</p>
+    <div class="tags" aria-label="Platformlar">${platforms(p).map(k => `<span class="tag ${esc(k)}">${esc(k)}</span>`).join("")}</div>
     <div class="acts">${actions(p)}</div>
   </li>`;
 }
 function render() {
   const t = norm(q.value.trim());
-  const items = P.filter(filters[cat]).filter(p => !t || norm(p.title + " " + p.desc + " " + platforms(p).join(" ")).includes(t));
-  list.innerHTML = items.length ? items.map(row).join("")
-    : `<li class="empty">“${esc(q.value)}” ile eşleşen proje yok. Başka bir kelime dene ya da “Hepsi” sekmesine geç.</li>`;
+  const items = P.filter(filters[cat]).filter(p => !t || norm(p.title + " " + p.desc + " " + platforms(p).join(" ") + " " + (CAT[p.cat] || "")).includes(t));
+  list.innerHTML = items.length ? items.map(card).join("")
+    : `<li class="empty"><b>Sonuç yok</b><span>“${esc(q.value)}” ile eşleşen proje bulunamadı. Başka bir kelime dene ya da bütün projelere dön.</span><button class="btn" type="button" id="reset">Aramayı temizle</button></li>`;
+  // kademeli giriş: CSP satır içi stile izin vermediği için gecikmeyi CSSOM ile veriyoruz
+  if (!REDUCE) [...list.children].forEach((li, i) => li.style.setProperty("--d", Math.min(i, 12) * 40 + "ms"));
+  countEl.textContent = items.length ? `${items.length} proje gösteriliyor` : "Eşleşen proje yok";
 }
+list.addEventListener("click", e => {
+  if (e.target.closest("#reset")) { q.value = ""; cat = "all"; try { localStorage.setItem("wd-cat", cat); } catch (er) {} drawTabs(); render(); q.focus(); }
+});
 try { const s = new URLSearchParams(location.search).get("q"); if (s) { q.value = s.slice(0, 60); cat = "all"; } } catch (e) {}
-q.addEventListener("input", render);
-drawTabs(); render();
+let qt; q.addEventListener("input", () => { clearTimeout(qt); qt = setTimeout(render, 90); });
+q.addEventListener("keydown", e => { if (e.key === "Escape" && q.value) { q.value = ""; render(); } });
+document.addEventListener("keydown", e => {
+  if (e.key === "/" && !e.ctrlKey && !e.metaKey && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)) {
+    e.preventDefault(); q.focus({ preventScroll: true }); document.getElementById("projeler").scrollIntoView({ behavior: REDUCE ? "auto" : "smooth" });
+  }
+});
+drawTabs(true); render();
+
+/* ---------- üst menü ---------- */
+const nav = document.getElementById("nav"), burger = document.getElementById("burger"), menu = document.getElementById("menu");
+const toolbar = document.getElementById("toolbar"), toTop = document.getElementById("toTop"), progress = document.getElementById("progress");
+function setMenu(open) {
+  nav.classList.toggle("open", open);
+  burger.setAttribute("aria-expanded", String(open));
+  burger.querySelector(".sr").textContent = open ? "Menüyü kapat" : "Menüyü aç";
+  document.body.style.overflow = open ? "hidden" : "";
+}
+burger.addEventListener("click", () => setMenu(!nav.classList.contains("open")));
+menu.addEventListener("click", e => { if (e.target.closest("a")) setMenu(false); });
+document.addEventListener("keydown", e => { if (e.key === "Escape" && nav.classList.contains("open")) { setMenu(false); burger.focus(); } });
+matchMedia("(min-width: 861px)").addEventListener("change", e => { if (e.matches) setMenu(false); });
+
+// duyuru bölümü görünür olunca menüdeki bağlantısı da görünsün
+const duyuruSec = document.getElementById("duyuru"), duyuruLink = document.querySelector("[data-duyuru-link]");
+new MutationObserver(() => { duyuruLink.hidden = duyuruSec.hidden; }).observe(duyuruSec, { attributes: true, attributeFilter: ["hidden"] });
+
+// duyuru bandı varsa menü onun altında başlar, kaydırınca yukarı yapışır
+let bandH = 0;
+function measureBand() { bandH = [...document.querySelectorAll("body > .wd-bant")].reduce((t, el) => t + el.offsetHeight, 0); onScroll(); }
+new MutationObserver(measureBand).observe(document.body, { childList: true });
+
+let lastY = scrollY, ticking = false;
+function onScroll() {
+  ticking = false;
+  const y = scrollY, h = document.documentElement.scrollHeight - innerHeight;
+  nav.style.top = bandH > y ? (bandH - y) + "px" : "";
+  nav.classList.toggle("solid", y > 24);
+  // aşağı kaydırırken menü saklanır, yukarı çıkınca geri gelir (menü açıkken asla)
+  const away = y > innerHeight * .9 && y > lastY + 2 && !nav.classList.contains("open");
+  if (y < lastY - 2 || y < innerHeight * .9) nav.classList.remove("away");
+  else if (away) nav.classList.add("away");
+  root.classList.toggle("nav-hidden", nav.classList.contains("away"));
+  lastY = y;
+  progress.style.transform = `scaleX(${h > 0 ? Math.min(1, y / h) : 0})`;
+  toTop.classList.toggle("show", y > innerHeight * 1.2);
+  toTop.tabIndex = y > innerHeight * 1.2 ? 0 : -1;
+  const tr = toolbar.getBoundingClientRect();
+  toolbar.classList.toggle("stuck", tr.top <= parseFloat(getComputedStyle(toolbar).top) + 1 && list.getBoundingClientRect().bottom > tr.bottom);
+}
+addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
+onScroll();
+
+// hangi bölümdeyiz: menüde işaretle
+const navLinks = [...document.querySelectorAll("[data-nav]")];
+if ("IntersectionObserver" in window) {
+  const secs = navLinks.map(a => document.querySelector(a.getAttribute("href"))).filter(Boolean);
+  const spy = new IntersectionObserver(es => {
+    es.forEach(e => {
+      if (!e.isIntersecting) return;
+      navLinks.forEach(a => a.classList.toggle("active", a.getAttribute("href") === "#" + e.target.id));
+    });
+  }, { rootMargin: "-45% 0px -50% 0px" });
+  secs.forEach(s => spy.observe(s));
+}
+
+/* ---------- kaydırınca belirme ---------- */
+if (!REDUCE && "IntersectionObserver" in window) {
+  const io = new IntersectionObserver(es => {
+    es.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add("in");
+      if (e.target.classList.contains("stat")) { const b = e.target.querySelector("[data-count]"); if (b) countUp(b); }
+      io.unobserve(e.target);
+    });
+  }, { rootMargin: "0px 0px -8% 0px", threshold: .08 });
+  document.querySelectorAll(".rv").forEach(el => {
+    const sibs = [...el.parentElement.children].filter(c => c.classList.contains("rv"));
+    const i = sibs.indexOf(el);
+    if (i > 0) el.style.setProperty("--d", Math.min(i, 6) * 80 + "ms");
+    io.observe(el);
+  });
+} else {
+  root.classList.remove("rv-on");
+  statEls.forEach(countUp);
+}
 
 /* ---------- başlık her ekrana sığsın ---------- */
 const titleEl = document.querySelector(".title");
@@ -130,7 +283,18 @@ function fitTitle() {
 }
 fitTitle();
 const fontsReady = (document.fonts && document.fonts.ready) ? Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 1500))]) : Promise.resolve();
-fontsReady.then(fitTitle);
+
+/* ---------- açılış ekranı ---------- */
+const loader = document.getElementById("loader");
+const t0 = performance.now();
+const pageReady = fontsReady.then(() => new Promise(r => setTimeout(r, REDUCE ? 0 : Math.max(0, 650 - (performance.now() - t0)))))
+  .then(() => {
+    fitTitle(); moveInk(true);
+    loader.classList.add("done");
+    setTimeout(() => loader.remove(), 700);
+    requestAnimationFrame(() => root.classList.add("ready"));
+  });
+addEventListener("resize", () => { moveInk(true); measureBand(); });
 
 /* ---------- kahraman: buğulu cam ve kar ---------- */
 (() => {
@@ -207,17 +371,21 @@ fontsReady.then(fitTitle);
 
   // açılış: cam buğulanır, sonra başlığın üstü kendiliğinden silinir
   function intro() {
-    const el = document.querySelector(".title").getBoundingClientRect(), hr = hero.getBoundingClientRect();
-    const y0 = (el.top - hr.top + el.height * .5) * dpr, x0 = (el.left - hr.left) * dpr, x1 = (el.right - hr.left) * dpr;
+    // ölçüler silme başlarken alınır; başlığın giriş hareketi o ana kadar biter
+    let el, hr, y0, x0, x1, ly;
     const t0 = performance.now(), dur = 1300; let px = null, py = null;
     frostC.style.opacity = 0; frostC.style.transition = "opacity .9s ease"; requestAnimationFrame(() => { frostC.style.opacity = 1; });
     setTimeout(function step() {
       const k = Math.min(1, (performance.now() - t0 - 900) / dur);
       if (k > 0) {
+        if (!el) {
+          el = document.querySelector(".title").getBoundingClientRect(); hr = hero.getBoundingClientRect();
+          y0 = (el.top - hr.top + el.height * .5) * dpr; x0 = (el.left - hr.left) * dpr; x1 = (el.right - hr.left) * dpr;
+          ly = (document.querySelector(".lead").getBoundingClientRect().top - hr.top + 14) * dpr;
+        }
         const e = 1 - Math.pow(1 - k, 3), x = x0 + (x1 - x0) * e, y = y0 + Math.sin(e * Math.PI * 2) * el.height * .22 * dpr;
         if (px !== null) stroke(px, py, x, y); px = x; py = y;
         // ikinci, ince bir geçiş açıklama satırının üstünden
-        const ly = (document.querySelector(".lead").getBoundingClientRect().top - hr.top + 14) * dpr;
         dab(x0 + (x1 - x0) * e * .9 + (x1 - x0) * .05, ly);
       }
       if (k < 1) requestAnimationFrame(step);
@@ -244,5 +412,6 @@ fontsReady.then(fitTitle);
   let rt, lastW = innerWidth; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { if (innerWidth !== lastW) { lastW = innerWidth; fitTitle(); fit(); } }, 200); });
 
   fit(); requestAnimationFrame(frame);
-  fontsReady.then(() => { fitTitle(); intro(); });
+  // başlık ve açıklama yerine oturduktan sonra camı sil
+  pageReady.then(() => setTimeout(intro, 350));
 })();
