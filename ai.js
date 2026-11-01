@@ -1,8 +1,8 @@
 /* Ayaz — Winterdeveloper yapay zeka asistanı
-   Mesajlar Vercel'deki sunucuya gider; Groq anahtarı orada gizli durur.  */
+   Mesajlar Cloudflare'deki sunucuya gider; Groq anahtarı orada gizli durur.  */
 (function () {
   "use strict";
-  var API = "https://winterdeveloper-ai.vercel.app/api/chat";
+  var API = "https://super-math-8092winterdeveloper-ai.ensygk115.workers.dev/";
   var KEY = "wd-ayaz-sohbet";
   var MAX_LEN = 1200;
   var FLAKE = '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 4v40M6.7 14l34.6 20M6.7 34l34.6-20"/><path d="M18 7l6 4 6-4M18 41l6-4 6 4M7 21l5.3-2.4-.5-6M41 27l-5.3 2.4.5 6M7 27l5.3 2.4-.5 6M41 21l-5.3-2.4.5-6"/></svg>';
