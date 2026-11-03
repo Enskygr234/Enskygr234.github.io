@@ -131,7 +131,7 @@ const COVER = {
   "kar-birlestir": ["video/karbirlestir.jpg", "karbirlestir"], "golhaber": ["video/golhaber.jpg", "golhaber"],
   "Winter-gym": ["video/wintergym.jpg", "wintergym"], "ensdewloper.github.io": ["video/tarifler.jpg", "tarifler"],
   "kayip-fener": ["kapak/kayip-fener.png"], "son-kis": ["kapak/son-kis.png"],
-  "Ayaz-launcher": ["kapak/ayaz-launcher.png"], "buz-arsiv": ["kapak/buz-arsiv.png"]
+  "Ayaz-launcher": ["kapak/ayaz-launcher.png"], "FloatingDock": ["kapak/floating-dock.jpg"], "buz-arsiv": ["kapak/buz-arsiv.png"]
 };
 const HUE = { game: 150, app: 262, tool: 28, web: 212 };
 const hash = s => [...s].reduce((h, c) => (h * 31 + c.charCodeAt(0)) | 0, 7);
