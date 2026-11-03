@@ -121,23 +121,152 @@ tabs.addEventListener("click", e => {
 });
 
 const norm = s => s.toLocaleLowerCase("tr-TR");
-const card = p => `<li class="card" data-cat="${esc(p.cat)}">
-    <div class="card-top"><div class="ic" aria-hidden="true">${esc(p.icon)}</div><span class="cat ${esc(p.cat)}">${esc(CAT[p.cat] || "")}</span></div>
-    <h3>${esc(p.title)}</h3>
-    <p>${esc(p.desc)}</p>
-    <div class="tags" aria-label="Platformlar">${platforms(p).map(k => `<span class="tag">${esc(k)}</span>`).join("")}</div>
-    <div class="acts">${actions(p)}</div>
-  </li>`;
 
+/* ---------- kart kapakları: ekran görüntüsü + video önizleme ---------- */
+const IMG = "/ensdewloper.github.io/img/";
+const COVER = {
+  "Winterball": ["video/winterball.jpg", "winterball"], "mahalle": ["video/mahalle.jpg", "mahalle"],
+  "ayazle": ["video/ayazle.jpg", "ayazle"], "Son-Vardiya": ["video/sonvardiya.jpg", "sonvardiya"],
+  "Son-Tren": ["video/sontren.jpg", "sontren"], "buz-kirici": ["video/buzkirici.jpg", "buzkirici"],
+  "kar-birlestir": ["video/karbirlestir.jpg", "karbirlestir"], "golhaber": ["video/golhaber.jpg", "golhaber"],
+  "Winter-gym": ["video/wintergym.jpg", "wintergym"], "ensdewloper.github.io": ["video/tarifler.jpg", "tarifler"],
+  "kayip-fener": ["kapak/kayip-fener.png"], "son-kis": ["kapak/son-kis.png"],
+  "Ayaz-launcher": ["kapak/ayaz-launcher.png"], "buz-arsiv": ["kapak/buz-arsiv.png"]
+};
+const HUE = { game: 150, app: 262, tool: 28, web: 212 };
+const hash = s => [...s].reduce((h, c) => (h * 31 + c.charCodeAt(0)) | 0, 7);
+const coverOf = p => COVER[p.id] ? { img: IMG + COVER[p.id][0], video: COVER[p.id][1] ? MEDIA + COVER[p.id][1] + ".mp4" : "" } : null;
+const PLAT = {
+  Android: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></svg>',
+  Windows: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>',
+  Minecraft: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM9 9h2v2H9zm4 0h2v2h-2zm-3 4h4v4h-1v-2h-2v2h-1z"/></svg>',
+  "Tarayıcı": '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>'
+};
+const ARROW = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m0 0-6-6m6 6-6 6"/></svg>';
+const ago = d => { if (!d) return ""; const n = Math.max(0, Math.round((Date.now() - new Date(d)) / 864e5)); return n === 0 ? "bugün" : n === 1 ? "dün" : n < 30 ? n + " gün önce" : Math.round(n / 30) + " ay önce"; };
+const art = p => `<div class="art" aria-hidden="true"><i class="orb a"></i><i class="orb b"></i><span class="glyph">${esc(p.icon)}</span></div>`;
+
+const card = p => {
+  const c = coverOf(p), d = p.dl[0];
+  const quick = d ? `<a class="quick" href="${esc(safeUrl(d.url))}" rel="noopener noreferrer" download aria-label="${esc(p.title)}: ${esc(d.kind)} için indir (${size(d.mb)})" title="Hemen indir · ${size(d.mb)}">${ICON.dl}</a>`
+    : p.web ? `<a class="quick" href="${esc(safeUrl(p.web))}" target="_blank" rel="noopener noreferrer" aria-label="${esc(p.title)}: tarayıcıda aç (yeni sekmede)" title="Tarayıcıda aç">${ICON.web}</a>` : "";
+  return `<li class="card" data-id="${esc(p.id)}" data-cat="${esc(p.cat)}"${c && c.video ? ` data-video="${esc(c.video)}"` : ""}>
+    <div class="cover">${c ? `<img src="${esc(c.img)}" alt="" loading="lazy" decoding="async">` : art(p)}
+      <span class="cat ${esc(p.cat)}">${esc(CAT[p.cat] || "")}</span>${quick}
+    </div>
+    <div class="cbody">
+      <h3><span class="ic" aria-hidden="true">${esc(p.icon)}</span>${esc(p.title)}</h3>
+      <p>${esc(p.desc)}</p>
+      <div class="cfoot">
+        <span class="plats">${platforms(p).map(k => `<span class="plat" title="${esc(k)}">${PLAT[k] || ""}<span>${esc(k)}</span></span>`).join("")}</span>
+        <span class="go">Detay${ARROW}</span>
+      </div>
+    </div>
+    <button class="hit" type="button" data-open="${esc(p.id)}"><span class="sr">${esc(p.title)} detaylarını aç</span></button>
+  </li>`;
+};
+
+let drawn = 0;
+/* kartlar ekrana girdikçe sırayla belirsin */
+const cardIO = !REDUCE && "IntersectionObserver" in window ? new IntersectionObserver(es => {
+  es.filter(e => e.isIntersecting).forEach((e, i) => {
+    const el = e.target; cardIO.unobserve(el);
+    el.style.setProperty("--i", Math.min(i, 12));
+    el.classList.remove("wait"); el.classList.add("pop");
+    el.addEventListener("animationend", ev => { if (ev.target === el && ev.animationName === "cardIn") el.classList.remove("pop", "re"); });
+  });
+}, { rootMargin: "0px 0px -4% 0px" }) : null;
 function render() {
   const t = norm(q.value.trim());
   const items = P.filter(filters[cat]).filter(p => !t || norm(p.title + " " + p.desc + " " + platforms(p).join(" ") + " " + (CAT[p.cat] || "")).includes(t));
   list.innerHTML = items.length ? items.map(card).join("")
     : `<li class="empty"><b>Sonuç yok</b><span>“${esc(q.value)}” ile eşleşen proje bulunamadı.</span><button class="btn sm" type="button" id="reset">Aramayı temizle</button></li>`;
   countEl.textContent = items.length ? `${items.length} proje gösteriliyor` : "Eşleşen proje yok";
+  if (cardIO) cardIO.disconnect();
+  list.querySelectorAll(".card").forEach(el => {
+    const p = byId(el.dataset.id);
+    el.style.setProperty("--h", (HUE[p.cat] ?? 212) + (hash(p.id) % 36) - 18);
+    if (cardIO) { el.classList.add("wait"); if (drawn) el.classList.add("re"); cardIO.observe(el); }
+  });
+  drawn++;
+  moveInk();
 }
+
+/* kayan sekme göstergesi */
+const ink = document.createElement("span"); ink.className = "ink"; ink.setAttribute("aria-hidden", "true"); tabs.prepend(ink);
+function moveInk() {
+  const b = tabs.querySelector('.tab[aria-pressed="true"]'); if (!b) return;
+  ink.style.setProperty("--x", b.offsetLeft + "px"); ink.style.setProperty("--w", b.offsetWidth + "px");
+  tabs.classList.add("inked");
+}
+addEventListener("resize", moveInk);
+if (document.fonts) document.fonts.ready.then(moveInk);
+
+/* üzerine gelince: 3D eğilme, imleci izleyen ışık, video önizleme */
+if (HOVER && !REDUCE) {
+  let cur = null;
+  const leave = el => { el.style.removeProperty("--rx"); el.style.removeProperty("--ry"); el.classList.remove("hov", "playing"); const v = el.querySelector("video"); if (v) v.pause(); };
+  list.addEventListener("pointermove", e => {
+    const el = e.target.closest(".card");
+    if (el !== cur) { if (cur) leave(cur); cur = el; if (el) enter(el); }
+    if (!el) return;
+    const r = el.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+    el.style.setProperty("--mx", (x * 100).toFixed(1) + "%"); el.style.setProperty("--my", (y * 100).toFixed(1) + "%");
+    el.style.setProperty("--ry", ((x - .5) * 10).toFixed(2) + "deg"); el.style.setProperty("--rx", ((.5 - y) * 8).toFixed(2) + "deg");
+  });
+  list.addEventListener("pointerleave", () => { if (cur) leave(cur); cur = null; });
+  function enter(el) {
+    el.classList.add("hov");
+    if (!el.dataset.video) return;
+    let v = el.querySelector("video");
+    if (!v) {
+      v = document.createElement("video"); v.muted = true; v.loop = true; v.playsInline = true; v.preload = "none";
+      v.setAttribute("aria-hidden", "true"); v.src = el.dataset.video;
+      el.querySelector(".cover").insertBefore(v, el.querySelector(".cat"));
+    }
+    v.play().then(() => { if (el === cur) el.classList.add("playing"); else v.pause(); }).catch(() => {});
+  }
+}
+
+/* ---------- detay paneli ---------- */
+const dlg = document.createElement("dialog");
+dlg.className = "pd"; dlg.setAttribute("aria-labelledby", "pd-t");
+document.body.appendChild(dlg);
+let lastFocus = null;
+function openDetail(id) {
+  const p = byId(id); if (!p) return;
+  const c = coverOf(p);
+  dlg.innerHTML = `<div class="pd-in">
+    <button class="pd-x" type="button" data-close aria-label="Kapat"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    <div class="pd-media">${c ? (c.video ? `<video src="${esc(c.video)}" poster="${esc(c.img)}" muted loop playsinline ${REDUCE ? "" : "autoplay"} aria-hidden="true"></video>` : `<img src="${esc(c.img)}" alt="${esc(p.title)} ekran görüntüsü">`) : art(p)}</div>
+    <div class="pd-body">
+      <div class="pd-meta"><span class="cat ${esc(p.cat)}">${esc(CAT[p.cat] || "")}</span>${p.lang ? `<span class="tag">${esc(p.lang)}</span>` : ""}${p.updated ? `<span class="tag">Güncellendi: ${ago(p.updated)}</span>` : ""}</div>
+      <h2 id="pd-t"><span aria-hidden="true">${esc(p.icon)}</span> ${esc(p.title)}</h2>
+      <p>${esc(p.desc)}</p>
+      <div class="plats big">${platforms(p).map(k => `<span class="plat">${PLAT[k] || ""}<span>${esc(k)}</span></span>`).join("")}</div>
+      <div class="pd-acts">${actions(p)}</div>
+    </div>
+  </div>`;
+  dlg.querySelectorAll(".pd-media").forEach(m => { const h = (HUE[p.cat] ?? 212) + (hash(p.id) % 36) - 18; m.style.setProperty("--h", h); });
+  lastFocus = document.activeElement;
+  dlg.classList.remove("closing");
+  dlg.showModal();
+  dlg.querySelector(".pd-x").focus();
+}
+function closeDetail() {
+  if (!dlg.open || dlg.classList.contains("closing")) return;
+  const v = dlg.querySelector("video"); if (v) v.pause();
+  if (REDUCE) { dlg.close(); return; }
+  dlg.classList.add("closing");
+  setTimeout(() => { dlg.close(); dlg.classList.remove("closing"); }, 220);
+}
+dlg.addEventListener("close", () => { if (lastFocus && lastFocus.focus) lastFocus.focus(); });
+dlg.addEventListener("cancel", e => { e.preventDefault(); closeDetail(); });
+dlg.addEventListener("click", e => { if (e.target === dlg || e.target.closest("[data-close]")) closeDetail(); });
+
 list.addEventListener("click", e => {
-  if (e.target.closest("#reset")) { q.value = ""; cat = "all"; drawTabs(); render(); q.focus(); }
+  if (e.target.closest("#reset")) { q.value = ""; cat = "all"; drawTabs(); render(); q.focus(); return; }
+  const b = e.target.closest("[data-open]"); if (b) openDetail(b.dataset.open);
 });
 try { const s = new URLSearchParams(location.search).get("q"); if (s) { q.value = s.slice(0, 60); cat = "all"; } } catch (e) {}
 

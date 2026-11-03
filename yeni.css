@@ -173,21 +173,6 @@ main,.foot{margin-left:var(--side)}
 .tab[aria-pressed=true]{background:var(--blue);border-color:var(--blue-2);color:#fff;box-shadow:0 8px 24px -10px rgba(47,123,255,.8)}
 .tab[aria-pressed=true] span{background:rgba(255,255,255,.2);color:#fff}
 
-/* proje kartları */
-.grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
-.card{display:flex;flex-direction:column;gap:10px;padding:18px;border-radius:var(--r);background:var(--panel);border:1px solid var(--line);transition:border-color .25s,transform .25s var(--ease),background .25s}
-.card:hover{border-color:rgba(90,162,255,.45);background:var(--panel-2);transform:translateY(-2px)}
-.card-top{display:flex;align-items:center;justify-content:space-between}
-.ic{width:46px;height:46px;display:grid;place-items:center;font-size:24px;border-radius:12px;background:rgba(47,123,255,.12);border:1px solid var(--line)}
-.cat{font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px}
-.cat.game{color:#6be39a;background:rgba(31,157,85,.15)}.cat.app{color:#b9a2ff;background:rgba(124,77,255,.15)}
-.cat.tool{color:#ffb27a;background:rgba(217,117,43,.15)}.cat.web{color:#8fbaff;background:rgba(47,123,255,.15)}
-.card h3{margin:2px 0 0;font-size:17px}
-.card p{margin:0;color:var(--text-2);font-size:14.5px;flex:1}
-.tags{display:flex;flex-wrap:wrap;gap:6px}
-.tag{font-size:12px;padding:2px 9px;border-radius:6px;background:var(--panel-2);color:var(--muted)}
-.card .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
-.card .btn small,.fcard .btn small{font-size:12px;opacity:.75;font-weight:500}
 .empty{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;gap:10px;padding:40px;text-align:center;color:var(--muted);border:1px dashed var(--line-2);border-radius:var(--r)}
 .empty b{color:var(--snow);font-size:18px}
 
