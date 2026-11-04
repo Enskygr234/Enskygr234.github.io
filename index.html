@@ -12,7 +12,7 @@
 <meta name="author" content="WinterDeveloper">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="https://enskygr234.github.io/">
-<meta name="theme-color" content="#03050d">
+<meta name="theme-color" content="#0b0d12">
 <meta name="color-scheme" content="dark">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="tr_TR">
@@ -26,13 +26,13 @@
 <link rel="manifest" href="site.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;600&family=Caveat:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="yeni.css?v=2">
 <link rel="stylesheet" href="kartlar.css?v=1">
 <link rel="stylesheet" href="duyuru.css?v=5">
 <link rel="stylesheet" href="ai.css?v=2">
 <link rel="stylesheet" href="ai-tema.css?v=1">
-<link rel="stylesheet" href="gelecek.css?v=1">
+<link rel="stylesheet" href="frost.css?v=1">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"WinterDeveloper","url":"https://enskygr234.github.io/","inLanguage":"tr-TR",
  "potentialAction":{"@type":"SearchAction","target":"https://enskygr234.github.io/?q={search_term_string}","query-input":"required name=search_term_string"}}
@@ -83,18 +83,12 @@
   <section class="hero" id="ust" aria-labelledby="hero-baslik">
     <div class="scene" aria-hidden="true">
       <div class="sky"></div>
-      <div class="aurora"><i></i><i></i><i></i></div>
-      <div class="holo"><b></b><i></i><i></i><i></i></div>
-      <div class="floor"></div>
-      <div class="scan"></div>
+      <svg class="hero-flake" viewBox="0 0 48 48"><path d="M24 4v40M6.7 14l34.6 20M6.7 34l34.6-20"/><path d="M18 7l6 4 6-4M18 41l6-4 6 4M7 21l5.3-2.4-.5-6M41 27l-5.3 2.4.5 6M7 27l5.3 2.4-.5 6M41 21l-5.3-2.4.5-6"/><circle cx="24" cy="24" r="5"/></svg>
       <canvas class="snow" id="snow"></canvas>
       <img class="hero-char" id="heroChar" alt="" hidden>
-      <span class="signature">WinterDeveloper</span>
     </div>
-
-    <div class="hud" aria-hidden="true"><span>WD://ÇEKİRDEK</span><span id="hudTime">--.--.2060 · --:--:--</span><span class="ok">● SİSTEM ÇEVRİMİÇİ</span></div>
     <div class="hero-in">
-      <p class="hello"><span aria-hidden="true">👋</span> Selam, ben WinterDeveloper!</p>
+      <p class="hello"><svg class="hello-dot" viewBox="0 0 8 8" aria-hidden="true"><circle cx="4" cy="4" r="4"/></svg> Selam, ben WinterDeveloper</p>
       <h1 id="hero-baslik">Kıştan ilham al,<br><span>geleceği kodla.</span></h1>
       <p class="lead">Nardugan'dan ve Türk masallarından ilham alan oyunlar, Android uygulamaları ve Windows araçları. Hepsi ücretsiz; indir ya da tarayıcıda hemen aç.</p>
       <div class="cta">
@@ -121,7 +115,7 @@
 
   <!-- ============ DUYURULAR ============ -->
   <section class="section" id="duyuru" data-duyuru-bolum hidden aria-labelledby="duyuru-baslik">
-    <div class="sec-head"><h2 id="duyuru-baslik"><span class="star" aria-hidden="true">📣</span> Duyurular</h2></div>
+    <div class="sec-head"><h2 id="duyuru-baslik"><svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h3l6 4V6L7 10zM17 9a4 4 0 0 1 0 6"/></svg> Duyurular</h2></div>
     <div id="duyurular"></div>
   </section>
 
@@ -152,7 +146,7 @@
       <svg class="flake" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 4v40M6.7 14l34.6 20M6.7 34l34.6-20"/><path d="M18 7l6 4 6-4M18 41l6-4 6 4M7 21l5.3-2.4-.5-6M41 27l-5.3 2.4.5 6M7 27l5.3 2.4-.5 6M41 21l-5.3-2.4.5-6"/></svg>
       <b>WinterDeveloper</b>
     </a>
-    <p>© <span id="yil">2026</span> · Kış gelir, kod yazılır. ❄️</p>
+    <p>© <span id="yil">2026</span> · Kış gelir, kod yazılır.</p>
     <nav aria-label="Alt menü">
       <a href="/ensdewloper.github.io/hakk%C4%B1mda.html">Hakkımda</a>
       <a href="https://github.com/Enskygr234/winter-browser-releases/releases" target="_blank" rel="noopener noreferrer">Sürümler</a>
@@ -174,7 +168,6 @@
 
 <script src="projects.js"></script>
 <script src="yeni.js?v=3"></script>
-<script src="gelecek.js?v=1" defer></script>
 <script src="duyuru.js" data-site="winterdeveloper" defer></script>
 <script src="ai.js?v=3" defer></script>
 </body>
