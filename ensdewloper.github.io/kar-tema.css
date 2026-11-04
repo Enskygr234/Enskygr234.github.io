@@ -1,0 +1,93 @@
+/* WinterDeveloper "Kar & Kırmızı" teması — Oyun Salonu ve Hakkımda için.
+   ortak.css + sayfa içi stillerden SONRA yüklenir; ana siteyle aynı palet ve yazı tipleri. */
+
+:root {
+  --zemin: #f6f8fc;
+  --zemin-2: #eef3fb;
+  --yuzey: #ffffff;
+  --yuzey-dolu: #ffffff;
+  --yuzey-2: rgba(13, 20, 36, .04);
+  --metin: #0d1424;
+  --soluk: #4f5a76;
+  --cizgi: rgba(13, 20, 36, .1);
+  --cizgi-guclu: rgba(217, 47, 51, .45);
+  --ayaz: #1f5fb8;
+  --buz: #d92f33;
+  --fener: #d92f33;
+  --fener-metin: #ffffff;
+  --android: #11804a;
+  --golge: 0 1px 2px rgba(13, 20, 36, .05), 0 14px 34px -16px rgba(13, 20, 36, .22);
+  --yazi-baslik: "Unbounded", "Onest", "Segoe UI", system-ui, sans-serif;
+  --yazi-govde: "Onest", "Segoe UI", system-ui, sans-serif;
+  color-scheme: light;
+}
+::selection { background: #d92f33; color: #fff; }
+a { color: var(--ayaz); }
+
+/* gökyüzü: aydınlık kar zemini, yumuşak kırmızı ve buz mavisi ışık */
+.gok { background: radial-gradient(60% 55% at 85% 0%, rgba(217, 47, 51, .10), transparent 70%), radial-gradient(55% 60% at 5% 10%, rgba(120, 160, 220, .18), transparent 70%), linear-gradient(180deg, var(--zemin-2), var(--zemin) 70%); }
+.gok i { mix-blend-mode: normal; opacity: .5; filter: blur(80px); }
+.gok i:nth-child(1) { background: radial-gradient(closest-side, rgba(217, 47, 51, .25), transparent); }
+.gok i:nth-child(2) { background: radial-gradient(closest-side, rgba(110, 155, 220, .3), transparent); }
+.gok i:nth-child(3) { background: radial-gradient(closest-side, rgba(217, 47, 51, .12), transparent); }
+/* kar taneleri beyaz çiziliyor: açık zeminde görünsün diye mavi-griye çevir */
+#kar { filter: brightness(.68) sepia(.6) hue-rotate(180deg) saturate(1.8); opacity: .8; }
+
+/* üst çubuk */
+.ust.kaydi { background: rgba(246, 248, 252, .86); }
+.logo { font-family: var(--yazi-baslik); font-weight: 700; font-size: 1rem; letter-spacing: -.01em; }
+.logo svg { color: var(--buz); filter: none; }
+.logo span { color: var(--metin); margin-left: -10px; } /* "Winter" ile "Developer" bitişik dursun */
+.menu a::after { background: var(--buz); }
+@media (max-width: 720px) { .ust { background: rgba(246, 248, 252, .92); } }
+
+/* düğmeler */
+.dugme { background: #fff; box-shadow: 0 1px 2px rgba(13, 20, 36, .06); }
+.dugme::before { background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, .55) 50%, transparent 70%); }
+.dugme:hover { background: #fff; box-shadow: var(--golge); }
+.dugme.fener { background: #d92f33; color: #fff; box-shadow: 0 10px 26px -10px rgba(217, 47, 51, .7); }
+.dugme.fener:hover { background: #bf2427; box-shadow: 0 14px 32px -10px rgba(217, 47, 51, .8); }
+@keyframes parla { 50% { box-shadow: 0 0 0 8px rgba(217, 47, 51, 0), 0 10px 34px -4px rgba(217, 47, 51, .7); } }
+.dugme.apk { border-color: rgba(17, 128, 74, .35); }
+.dugme.apk:hover { background: #e9f8f0; }
+
+/* kartlar ve ışık */
+[data-egim]::after { background: radial-gradient(380px circle at var(--mx) var(--my), rgba(217, 47, 51, .07), transparent 45%); }
+[data-egim]:hover { box-shadow: 0 30px 60px -28px rgba(13, 20, 36, .35); }
+.kar-patla { color: #d92f33; text-shadow: none; }
+.ilerleme { background: #d92f33; }
+
+/* ---------- Oyun Salonu ---------- */
+.bas h1 { font-weight: 900; letter-spacing: -.045em; }
+.serit a { background: #1b2645; box-shadow: var(--golge); transition: transform .45s cubic-bezier(.34, 1.56, .64, 1), box-shadow .4s; }
+.serit a:hover { transform: translateY(-6px) scale(1.04); box-shadow: 0 30px 56px -24px rgba(13, 20, 36, .45); z-index: 1; }
+.serit a::after { background: linear-gradient(180deg, transparent 40%, rgba(13, 20, 36, .9)); }
+.serit a:hover b { color: #ff6b6e; }
+.masa { background: #fff; backdrop-filter: none; -webkit-backdrop-filter: none; }
+.sekme[aria-selected="true"] { background: #fff; color: var(--buz); border-color: rgba(217, 47, 51, .35); box-shadow: 0 10px 26px -14px rgba(217, 47, 51, .5); }
+canvas.oyun-alani { background: #16204a; box-shadow: 0 18px 40px -20px rgba(13, 20, 36, .5); }
+.xox button { background: #f2f5fb; }
+.xox button:not(:disabled):hover { background: #e6ecf6; }
+.xox button.x { color: #1f5fb8; }
+.xox button.o { color: #d92f33; }
+.xox button.kazandi { background: #d92f33; color: #fff; }
+.secim button { background: #fff; }
+.tkm button { background: #fff; box-shadow: 0 1px 2px rgba(13, 20, 36, .06); }
+.tkm button:hover { border-color: #d92f33; }
+.eslesme .arka { background-color: #d92f33; background-image: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, .35) 0 2px, transparent 3px), radial-gradient(circle at 70% 65%, rgba(255, 255, 255, .25) 0 2px, transparent 3px); }
+.eslesme .on { background: #fff; }
+.eslesme.tamam .on { background: #fde8e8; }
+
+/* ---------- Hakkımda ---------- */
+.bas h1 .isil { background: none; color: #d92f33; animation: none; }
+.rakamlar { box-shadow: var(--golge); }
+.rakamlar div:hover { background: #fdf1f1; }
+.rakamlar b { text-shadow: none; }
+.rakamlar div:first-child b { color: #d92f33; }
+.araclar span { background: #fff; }
+.iletisim { background: #0d1424 !important; border: 0; color: #eef2fb; box-shadow: 0 30px 60px -30px rgba(13, 20, 36, .6); }
+.iletisim::before { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; background: radial-gradient(60% 120% at 100% 0%, rgba(217, 47, 51, .35), transparent 60%); }
+.iletisim > * { position: relative; }
+.iletisim .dugme:not(.fener) { background: transparent; color: #eef2fb; border-color: rgba(255, 255, 255, .25); box-shadow: none; }
+
+.alt-bilgi a:hover { color: #d92f33; }
